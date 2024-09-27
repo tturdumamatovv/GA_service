@@ -1,0 +1,131 @@
+@media screen and (min-width: 992px) {
+  .slide-text-content {
+    gap: 40px;
+  }
+  .slide-text-content h2 {
+    font-size: 28px;
+  }
+  .slide-text-content h5 {
+    font-size: 18px;
+  }
+
+  .slide-text-content p {
+    font-size: 16px;
+  }
+  .google-rating span {
+    font-size: 15px;
+  }
+
+  .btn-wa,
+  .btn-call {
+    font-size: 17px;
+  }
+
+  .advantages {
+    gap: 32px;
+  }
+
+  .features-grid {
+    margin-top: 50px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .tab-services {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 48px;
+  }
+  #services .nav,
+  .features-grid {
+    margin-top: 100px;
+  }
+  #banner-section {
+    padding: 40px 0;
+  }
+  .advantages-grid {
+    margin-top: 100px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+
+  .qa-cover{
+    margin-top: 100px;
+  }
+
+  .accordion {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tab-img-cover {
+    width: 350px;
+  }
+
+
+.customers-grid,.blog-grid{
+    margin-top: 100px;
+    grid-template-columns: repeat(4, calc(25% - 9px));
+    gap: 12px;
+  }
+
+  /* 
+    .title{
+        width: fit-content;
+        padding: 0 60px 10px 60px;
+        margin: 0 auto;
+    } */
+
+  #features,
+  #services,
+  #banner-section,
+  #why-choose-us {
+    margin-top: 160px;
+  }
+  .banner-bg{
+    padding: 150px 0;
+  }
+
+  .banner-bg::after {
+    transform: rotate(2deg);
+  }
+
+  .offcanvas{
+    background: transparent;
+  }
+
+  .team-cover{
+    grid-template-columns: repeat(4,calc(25% - 18px));
+  }
+
+  .open-hours-header,.call-us-header,.call-us-header h5,.open-hours-header h5{
+    color: #000;
+  }
+
+  .navbar-nav a{
+    font-size: 22px;
+    color: #000;
+  }
+  .navbar-nav a.active{
+    color: var(--color-primary) !important;
+    text-decoration: none;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .swiper-slide {
+    padding: 40px 32px;
+  }
+  .slide-text-content {
+    max-width: 1024px;
+    margin: 0 auto;
+    height: 100%;
+  }
+}
+@media screen and (min-width: 1440px) {
+  .slide-text-content {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .swiper-slide {
+    padding: 40px 32px;
+  }
+}
