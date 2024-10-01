@@ -204,9 +204,13 @@ header{
   text-align: center;
 }
 
-.advantages svg {
-  width: 24px;
-  height: 24px;
+.advantages img {
+position:relative !important;
+top:unset !important;
+left :unset !important;
+  width: 24px !important;
+  height: 24px !important;
+  z-index:1 !important;
 }
 
 .arrows {
@@ -678,7 +682,7 @@ article::after {
   text-align: center;
 }
 
-.blog-video__cover video {
+.blog-video__cover video{
   position: absolute;
   top: 0;
   left: 0;

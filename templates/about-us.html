@@ -5,6 +5,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="{{ site_meta.meta_description }}"/>
+    <meta name="title" content="{{ site_meta.meta_title }}"/>
+    <meta name="image" content="{% if site_meta.meta_image %}{{ site_meta.meta_image.url }}{% endif %}"/>
     <title>GA REPAIR SERVICE</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -26,7 +29,7 @@
       <nav class="navbar navbar-expand-lg">
         <div class="container align-items-center">
           <a class="navbar-brand" href="#">
-            <img src="{% static 'assets/GA-Logo.png' %}" alt="" />
+            <img src="{{ footer.logo.url }}" alt="" />
           </a>
           <button
             class="navbar-toggler"
@@ -46,7 +49,7 @@
           >
             <div class="offcanvas-header">
               <div class="navbar-brand">
-                <img src="{% static 'assets/GA-Logo.png' %}" alt="" />
+                <img src="{{ footer.logo.url }}" alt="" />
               </div>
               <button
                 type="button"
@@ -61,8 +64,9 @@
               <div
                 class="d-flex mt-4 mt-lg-0 flex-column flex-lg-row gap-5 flex-lg-grow-1 align-items-lg-center justify-content-lg-center w-100"
               >
+                {% for contact in contact_info %}
                 <a
-                  href="tel:+971 58 5929333"
+                  href="{{ contact.phone_link }}"
                   class="d-flex flex-row align-items-center gap-3 gap-lg-4 call-us-header"
                 >
                   <svg
@@ -79,10 +83,11 @@
                   </svg>
 
                   <div class="d-flex flex-column">
-                    <h5>Call Us</h5>
-                    <span>+971 58 5929333</span>
+                          <h5>{{ contact.title }}</h5>
+                          <span>{{ contact.phone_number }}</span>
                   </div>
                 </a>
+                {% endfor %}
 
                 <div class="d-flex flex-row align-items-center gap-3 gap-lg-4 open-hours-header">
                   <svg
@@ -102,8 +107,10 @@
                   </svg>
 
                   <div class="d-flex flex-column">
-                    <h5>Opening Hours</h5>
-                    <span>Mon-Sat: 10:00–20:00 Sun: CLOSED</span>
+                    {% for contact in contact_info %}
+                    <h5>{{ contact.opening_time_title }}</h5>
+                    <span>{{ contact.opening_days }}</span>
+                    {% endfor %}
                   </div>
                 </div>
                 <div class="">
@@ -114,944 +121,268 @@
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      Русский
+                      {% if request.LANGUAGE_CODE == 'ru' %}
+                        Русский
+                      {% elif request.LANGUAGE_CODE == 'en' %}
+                        English
+                      {% else %}
+                        {{ request.LANGUAGE_CODE }}
+                      {% endif %}
                     </button>
                     <ul class="dropdown-menu">
                       <li>
-                        <a class="active" href="/ru">РУ</a>
+                        <a class="{% if request.LANGUAGE_CODE == 'ru' %}active{% endif %}" href="/ru/about">РУ</a>
                       </li>
                       <li>
-                        <a href="/en">EN</a>
+                        <a class="{% if request.LANGUAGE_CODE == 'en' %}active{% endif %}" href="/en/about">EN</a>
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
-              <ul
-                class="navbar-nav justify-content-end justify-content-lg-center w-lg-100 pe-3 flex-lg-grow-1"
-              >
-                <li class="nav-item">
-                  <a
-                    class="nav-link active"
-                    aria-current="page"
-                    href="{% url 'index' %}"
-                    >Главная</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'service' %}">Услуги</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'about' %}">О нас</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'contact' %}">Контакты</a>
-                </li>
-              </ul>
+<ul class="navbar-nav justify-content-end justify-content-lg-center w-lg-100 pe-3 flex-lg-grow-1">
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'index' %}">
+      {{ navigation.home }}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'service' %}active{% endif %}" href="{% url 'service' %}">
+      {{ navigation.services }}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">
+      {{ navigation.about_us }}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">
+      {{ navigation.contacts }}
+    </a>
+  </li>
+</ul>
             </div>
           </div>
         </div>
       </nav>
     </header>
     <main>
-      <section id="about-hero">
-        <div class="container mt-5">
-          <h1 class="title">
-            Кто мы такие?
-          </h1>
+<section id="about-hero">
+  <div class="container mt-5">
+    <h1 class="title">{{ about_section.title }}</h1>
 
-        <div class="d-flex flex-column pt-5 gap-4 gap-lg-5">
-          <div class="d-flex flex-row flex-wrap justify-content-center gap-3 align-items-center">
-            <img class="col-12 col-lg-5 img-fluid" src="{% static 'assets/imacs.png' %}" alt="" />
-            <p class="col-12 col-lg-5">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
-              tenetur dolore, blanditiis atque cupiditate laboriosam expedita.
-              Quis neque vitae, exercitationem consectetur asperiores totam.
-              Blanditiis repellat consequuntur ipsum voluptatum impedit porro
-              illum repellendus commodi voluptas excepturi at atque ab,
-              necessitatibus voluptatem error tempore nulla, nemo illo eos iusto
-              deleniti. Repellat reiciendis sint accusantium atque, earum quae
-              ut maxime amet labore distinctio itaque perferendis quod,
-              aspernatur doloribus dignissimos soluta debitis asperiores
-              repudiandae blanditiis deleniti eum a deserunt placeat! Fugiat
-              laudantium laboriosam assumenda iure hic dolor unde dolore numquam
-              architecto rem dignissimos et natus voluptates, nostrum eos harum
-              voluptatem suscipit! Nostrum, expedita perspiciatis.
-            </p>
-          </div>
-          <div class="d-flex flex-row flex-lg-row-reverse flex-wrap justify-content-center align-items-center gap-3">
-            <img class="col-12 col-lg-5 img-fluid" src="{% static 'assets/imacs.png' %}" alt="" />
-            <p class="col-12 col-lg-5">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </p>
-          </div>
+    <div class="d-flex flex-column pt-5 gap-4 gap-lg-5">
+      {% for block in about_section.blocks.all %}
+      <div class="d-flex flex-row {% if block.is_reversed %} flex-lg-row-reverse {% endif %} flex-wrap justify-content-center align-items-center gap-3">
+        <img class="col-12 col-lg-5 img-fluid" src="{{ block.image.url }}" alt="" />
+        <p class="col-12 col-lg-5">{{ block.text }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section id="out-team">
+  <div class="container">
+    <h1 class="title">{{ team_section.title }}</h1>
+    <div class="team-cover">
+      {% for member in team_section.members.all %}
+      <div class="team-member d-flex flex-column gap-3">
+        <img src="{{ member.image.url }}" alt="{{ member.name }}">
+        <div class="team-member_name">
+          <h5>{{ member.name }}</h5>
+          <p class="p-0 m-0">{{ member.position }}</p>
         </div>
       </div>
-
-      </section>
-
-      <section id="out-team">
-        <div class="container">
-          <h1 class="title">
-            Наша команда
-          </h1>
-          <div class="team-cover">
-            <div class="team-member d-flex flex-column gap-3">
-              <img src="{% static 'assets/review-user-img.jpeg' %}" alt="">
-              <div class="team-member_name">
-                <h5>Alihan</h5>
-                <p class="p-0 m-0">
-                  Tech service
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 
       <section id="features">
         <div class="container">
-          <h1 class="title">Устроства которые мы ремонтируем</h1>
+          <h1 class="title">
+            {{ features_section.title|safe }}
+          </h1>
 
           <div class="features-grid">
+            {% for item in features_section.feature_items.all %}
             <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/iphones.png' %}" alt="" />
-                <p>iPhone</p>
+              <a target="_blank" href="{{ item.link }}">
+                <img src="{{ item.image.url }}" alt="{{ item.title }}" />
+                <p>{{ item.title }}</p>
               </a>
             </div>
-            <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/ipads.png' %}" alt="" />
-                <p>iPad</p>
-              </a>
-            </div>
-            <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/macs.png' %}" alt="" />
-                <p>MacBook</p>
-              </a>
-            </div>
-            <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/imacs.png' %}" alt="" />
-                <p>iMac</p>
-              </a>
-            </div>
-            <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/laptops.png' %}" alt="" />
-                <p>Ноутбук или ПК</p>
-              </a>
-            </div>
-            <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/consoles.png' %}" alt="" />
-                <p>Игровые консоли</p>
-              </a>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </section>
 
-      <section id="statistics">
-        <div class="container">
-          <div class="title">GA в цифрах</div>
-
-          <div
-            class="d-flex flex-column justify-content-center flex-lg-row gap-5 counts"
-          >
-            <div class="d-flex flex-column align-items-center">
-              <span>
-                <img src="{% static 'assets/tech-service.svg' %}" alt="" />
-              </span>
-              <p>
-                <span class="counter" data-target="177654">177654</span>
-              </p>
-              <h5>Устройств отремонтировано</h5>
-            </div>
-            <div class="d-flex flex-column align-items-center">
-              <span>
-                <img src="{% static 'assets/experience.svg' %}" alt="" />
-              </span>
-              <p>
-                <span class="counter" data-target="7">7</span>
-              </p>
-              <h5>Лет на рынке</h5>
-            </div>
-            <div class="d-flex flex-column align-items-center">
-              <span>
-                <img src="{% static 'assets/happy-customer.svg' %}" alt="" />
-              </span>
-              <p>
-                <span class="counter" data-target="100">100</span>
-                %
-              </p>
-              <h5>Довольных клиентов</h5>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="banner-section">
-        <div class="banner-bg">
+        <section id="statistics">
           <div class="container">
-            <h1 class="banner-title">
-              Внимание к деталям и индивидуальный подход к каждому клиенту
-            </h1>
+            <div class="title">{{ statistics_section.title }}</div>
 
-            <p>
-              Как ведущий сервис по ремонту компьютеров и мобильных телефонов в
-              Дубае, мы предлагаем решение любых проблем с вашими устройствами —
-              от замены экранов до сложного ремонта материнских плат. Более
-              100,000 довольных клиентов доверяют нам за высокое качество
-              ремонта, доступные цены и исключительный уровень обслуживания.
-              Оцените наш премиальный сервис в нашем Apple Service Center в
-              Дубае и верните своему устройству идеальное состояние уже сегодня.
-            </p>
-
-            <div class="d-flex flex-row justify-content-center cta-buttons">
-              <a href="https://wa.me/971585929333" class="btn-wa"> WhatsApp </a>
-              <a href="tel:+971 58 5929333" class="btn-call"> Позвонить </a>
+            <div class="d-flex flex-column justify-content-center flex-lg-row gap-5 counts">
+              {% for statistic in statistics_section.statistics.all %}
+              <div class="d-flex flex-column align-items-center">
+                <span>
+                  <img src="{{ statistic.icon.url }}" alt="" />
+                </span>
+                <p>
+                  <span class="counter" data-target="{{ statistic.value }}">{{ statistic.value }}</span>
+                </p>
+                <h5>{{ statistic.title }}</h5>
+              </div>
+              {% endfor %}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <section id="banner-section">
+          <div class="banner-bg">
+            <div class="container">
+              <h1 class="banner-title">{{ banner_section.title }}</h1>
+
+              <p>{{ banner_section.description }}</p>
+
+              {% for slide in hero_slides %}
+              <div class="d-flex flex-row justify-content-center cta-buttons">
+                <a href="{{ slide.whatsapp_link }}" class="btn-wa">{{ slide.whatsapp_text }}</a>
+                <a href="tel:{{ slide.call_link }}" class="btn-call">{{ slide.call_text }}</a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
 
       <section id="google-reviews">
-        <div class="container">
-          <h1 class="title">Отзывы Google</h1>
+    <div class="container">
+        <h1 class="title">{{ google_section.title }}</h1>
 
-          <!-- Slider main container -->
-          <div class="swiper google-slider">
+        <!-- Slider main container -->
+        <div class="swiper google-slider">
             <!-- Additional required wrapper -->
             <div class="swiper-wrapper">
-              <!-- Slides -->
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
+                <!-- Slides -->
+                {% for review in google_section.google.all %}
+                <div class="swiper-slide">
+                    <div class="review-card">
+                        <div class="d-flex flex-row align-items-center review-header position-relative">
+                            <img src="{% static 'assets/google-logo.png' %}" class="google-logo" alt="" />
+                            <div class="avatar">
+                                {% if review.avatar_url %}
+                                    <img src="{{ review.avatar_url }}" alt="{{ review.reviewer_name }}" />
+                                {% else %}
+                                    <img src="{% static 'assets/google-avatar.png' %}" alt="{{ review.reviewer_name }}" />
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column">
+                                <h5 class="review-name">{{ review.reviewer_name }}</h5>
+                                <div class="d-flex flex-row rating gap-1">
+                                    {% for i in "12345"|slice:":review.rating" %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f0ad4e" class="bi bi-star-fill" viewBox="0 0 16 16">
+                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                    </svg>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-text">
+                            <p>{{ review.text }}</p>
+                        </div>
                     </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
                 </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
-                </div>
-              </div>
+                {% endfor %}
             </div>
-            <!-- If we need pagination -->
-          </div>
-          <div class="pagination position-relative">
-            <div class="swiper-pagination"></div>
-          </div>
         </div>
-      </section>
+        <div class="pagination position-relative">
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</section>
 
       <section id="happy-customers">
         <div class="container">
-          <h1 class="title">Наши счастливые клиенты</h1>
+          <h1 class="title">{{ happy_customers_section.title }}</h1>
 
           <div class="customers-grid">
+            {% for customer in happy_customers_section.customers.all %}
             <div class="customer">
-              <video src="{% static 'assets/SampleVideo_1280x720_2mb.mp4' %}"></video>
+              {% if customer.video %}
+                <video src="{{ customer.video.url }}" controls></video>
+              {% elif customer.image %}
+                <img src="{{ customer.image.url }}" alt="Customer Image" />
+              {% endif %}
             </div>
-            <div class="customer">
-              <img src="{% static 'assets/mac-repair.webp' %}" alt="" />
-            </div>
-            <div class="customer">
-              <video src="{% static 'assets/SampleVideo_1280x720_2mb.mp4' %}"></video>
-            </div>
-            <div class="customer">
-              <img src="{% static 'assets/mac-repair.webp' %}" alt="" />
-            </div>
-            <div class="customer">
-              <video src="{% static 'assets/SampleVideo_1280x720_2mb.mp4' %}"></video>
-              <!-- <img
-                src="./assets/mac-repair.webp"
-                class="img-fluid rounded-top"
-                alt=""
-              /> -->
-            </div>
-            <div class="customer">
-              <img src="{% static 'assets/consoles.png' %}" alt="" />
-            </div>
+            {% endfor %}
           </div>
         </div>
       </section>
     </main>
-    <footer>
+<footer>
       <div class="container">
         <div class="d-flex flex-column flex-lg-row gap-5">
-          <div class="d-flex flex-column order-1 order-lg-2 contacts">
-            <h3 class="footer-title">Адрес</h3>
 
-            <!-- <h5>GA REPAIR SERVICE</h5> -->
-
-            <div class="d-flex flex-column adress-info gap-3">
-              <a
-                href="https://maps.app.goo.gl/YK9DC7iwyQVBZmBR7"
-                target="_blank"
-                class="d-flex flex-row align-items-center gap-3"
-              >
-                <img src="{% static 'assets/location.svg' %}" alt="" />
-                <span
-                  >Al Barsha 1 Dusseldorf Business Point Office 805 -
-                  Dubai</span
-                >
-              </a>
-              <a
-                href="tel:+971 58 513 8333"
-                target="_blank"
-                class="d-flex flex-row gap-3"
-              >
-                <img src="{% static 'assets/smartphone.svg' %}" alt="" />
-                <span> +971 58 513 8333</span>
-              </a>
-              <a
-                href="mailto:info@geniusahmed.ae"
-                target="_blank"
-                class="d-flex flex-row gap-3"
-              >
-                <img src="{% static 'assets/email.svg' %}" alt="" />
-                <span>info@geniusahmed.ae</span>
-              </a>
-            </div>
-
-            <div class="map">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14450.494538268718!2d55.2050595!3d25.1145986!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6d8ffe75c899%3A0x4bb0786b5b8f748f!2sGenius%20Ahmed%20IT%20Company!5e0!3m2!1sru!2skg!4v1727329576288!5m2!1sru!2skg"
-                width="100%"
-                height="100%"
-                style="border: 0"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-
-            <div class="d-flex flex-row justify-content-center gap-4 payment">
-              <div>
-                <img src="{% static 'assets/visa.svg' %}" alt="" />
-              </div>
-              <div>
-                <img src="{% static 'assets/master.svg' %}" alt="" />
-              </div>
-              <div>
-                <img src="{% static 'assets/apple-pay.svg' %}" alt="" />
-              </div>
-              <div>
-                <img src="{% static 'assets/g-pay.svg' %}" alt="" />
-              </div>
-            </div>
-          </div>
-
-          <div class="d-flex flex-column order-2 order-lg-3 open-hours">
-            <h3 class="footer-title">Время работы</h3>
-
+          <!-- About Section -->
+          <div class="d-flex flex-column order-3 order-lg-1 col-12 col-lg-4 footer-about">
             <div class="d-flex flex-column">
-              <div class="d-flex flex-row">
-                <span>Понедельник</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Вторник</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Среда</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Четверг</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Пятница</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Суббота</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Воскресенье</span>
-                <span>Выходной</span>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="d-flex flex-column order-3 order-lg-1 col-12 col-lg-4 footer-about"
-          >
-            <div class="d-flex flex-column">
-              <img src="{% static 'assets/GA-Logo.png' %}" alt="" />
-              <p>
-                <strong> GA REPAIR SERVICE </strong>специализируется на широком
-                спектре современных технологических и информационных решений,
-                охватывающих следующие направления деятельности: Программные
-                услуги | Аппаратные услуги | Цифровой маркетинг | ИТ-служба
-                поддержки | Умные дома | Кибербезопасность | Системы
-                видеонаблюдения и безопасности | Системы контроля доступа. В
-                Genius Ahmed мы стремимся к инновационным решениям, которые
-                выводят ваш бизнес и дом на новый уровень современных
-                технологий. Наши услуги ориентированы на клиента и предоставляют
-                высококачественные решения для повышения эффективности и
-                безопасности.
-              </p>
+              <img src="{{ footer.logo.url }}" alt="Company Logo" />
+              <p>{{ footer.about_text }}</p>
               <div class="d-flex flex-row justify-content-center gap-3 smn">
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/instagram.jpeg' %}" alt="" />
+                {% for social in footer.socials.all %}
+                <a href="{{ social.url }}" target="_blank">
+                  <img src="{{ social.icon.url }}" alt="{{ social.name }}" />
                 </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/facebook.svg' %}" alt="" />
-                </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/sl_z_072523_61700_01.jpg' %}" alt="" />
-                </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/tiktok.jpeg' %}" alt="" />
-                </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/youtube.svg' %}" alt="" />
-                </a>
+                {% endfor %}
               </div>
             </div>
           </div>
+
+          <!-- Contact Info -->
+          <div class="d-flex flex-column order-1 order-lg-2 contacts">
+            <h3 class="footer-title">{{ footer.title_address }}</h3>
+            <div class="d-flex flex-column adress-info gap-3">
+              <a href="{{ footer.address.first.link }}" target="_blank" class="d-flex flex-row align-items-center gap-3">
+                <img src="{{ footer.address.first.logo.url }}" alt="" />
+                <span>{{ footer.address.first.address }}</span>
+              </a>
+              <a href="{{ footer.phone.first.link }}" target="_blank" class="d-flex flex-row gap-3">
+                <img src="{{ footer.phone.first.logo.url }}" alt="" />
+                <span>{{ footer.phone.first.phone }}</span>
+              </a>
+              <a href="{{ footer.email.first.link }}" target="_blank" class="d-flex flex-row gap-3">
+                <img src="{{ footer.email.first.logo.url }}" alt="" />
+                <span>{{ footer.email.first.email }}</span>
+              </a>
+            </div>
+            <div class="map">
+                {{ footer.address.first.map_iframe|safe }}
+            </div>
+            <div class="d-flex flex-row justify-content-center gap-4 payment">
+              {% for payment in footer.payment_methods.all %}
+              <div><img src="{{ payment.icon.url }}" alt="Payment Method" /></div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Working Hours -->
+          <div class="d-flex flex-column order-2 order-lg-3 open-hours">
+            <h3 class="footer-title">{{ footer.title_work_time }}</h3>
+            <div class="d-flex flex-column">
+              {% for hour in footer.work_hours.all %}
+              <div class="d-flex flex-row">
+                <span>{{ hour.day }}</span>
+                {% if hour.is_closed %}
+                <span>Выходной</span>
+                {% else %}
+                <span>{{ hour.open_time }} - {{ hour.close_time }}</span>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
         </div>
       </div>
     </footer>

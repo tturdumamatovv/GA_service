@@ -5,6 +5,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="{{ site_meta.meta_description }}"/>
+    <meta name="title" content="{{ site_meta.meta_title }}"/>
+    <meta name="image" content="{% if site_meta.meta_image %}{{ site_meta.meta_image.url }}{% endif %}"/>
     <title>GA REPAIR SERVICE</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -26,7 +29,7 @@
       <nav class="navbar navbar-expand-lg">
         <div class="container align-items-center">
           <a class="navbar-brand" href="#">
-            <img src="{% static 'assets/GA-Logo.png' %}" alt="" />
+            <img src="{{ footer.logo.url }}" alt="" />
           </a>
           <button
             class="navbar-toggler"
@@ -46,7 +49,7 @@
           >
             <div class="offcanvas-header">
               <div class="navbar-brand">
-                <img src="{% static 'assets/GA-Logo.png' %}" alt="" />
+                <img src="{{ footer.logo.url }}" alt="" />
               </div>
               <button
                 type="button"
@@ -61,8 +64,9 @@
               <div
                 class="d-flex mt-4 mt-lg-0 flex-column flex-lg-row gap-5 flex-lg-grow-1 align-items-lg-center justify-content-lg-center w-100"
               >
+                {% for contact in contact_info %}
                 <a
-                  href="tel:+971 58 5929333"
+                  href="{{ contact.phone_link }}"
                   class="d-flex flex-row align-items-center gap-3 gap-lg-4 call-us-header"
                 >
                   <svg
@@ -79,11 +83,11 @@
                   </svg>
 
                   <div class="d-flex flex-column">
-                    <h5>Call Us</h5>
-                    <span>+971 58 5929333</span>
+                          <h5>{{ contact.title }}</h5>
+                          <span>{{ contact.phone_number }}</span>
                   </div>
                 </a>
-
+                {% endfor %}
                 <div
                   class="d-flex flex-row align-items-center gap-3 gap-lg-4 open-hours-header"
                 >
@@ -104,8 +108,10 @@
                   </svg>
 
                   <div class="d-flex flex-column">
-                    <h5>Opening Hours</h5>
-                    <span>Mon-Sat: 10:00–20:00 Sun: CLOSED</span>
+                    {% for contact in contact_info %}
+                    <h5>{{ contact.opening_time_title }}</h5>
+                    <span>{{ contact.opening_days }}</span>
+                    {% endfor %}
                   </div>
                 </div>
                 <div class="">
@@ -116,499 +122,143 @@
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      Русский
+                      {% if request.LANGUAGE_CODE == 'ru' %}
+                        Русский
+                      {% elif request.LANGUAGE_CODE == 'en' %}
+                        English
+                      {% else %}
+                        {{ request.LANGUAGE_CODE }}
+                      {% endif %}
                     </button>
                     <ul class="dropdown-menu">
                       <li>
-                        <a class="active" href="/ru">РУ</a>
+                        <a class="{% if request.LANGUAGE_CODE == 'ru' %}active{% endif %}" href="/ru/service">РУ</a>
                       </li>
                       <li>
-                        <a href="/en">EN</a>
+                        <a class="{% if request.LANGUAGE_CODE == 'en' %}active{% endif %}" href="/en/service">EN</a>
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
-              <ul
-                class="navbar-nav justify-content-end justify-content-lg-center w-lg-100 pe-3 flex-lg-grow-1"
-              >
-                <li class="nav-item">
-                  <a
-                    class="nav-link active"
-                    aria-current="page"
-                    href="{% url 'index' %}"
-                    >Главная</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'service' %}">Услуги</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'about' %}">О нас</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'contact' %}">Контакты</a>
-                </li>
-              </ul>
+<ul class="navbar-nav justify-content-end justify-content-lg-center w-lg-100 pe-3 flex-lg-grow-1">
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'index' %}">
+      {{ navigation.home }}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'service' %}active{% endif %}" href="{% url 'service' %}">
+      {{ navigation.services }}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">
+      {{ navigation.about_us }}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">
+      {{ navigation.contacts }}
+    </a>
+  </li>
+</ul>
             </div>
           </div>
         </div>
       </nav>
     </header>
     <main>
-      <section id="hero">
-        <div class="swiper hero-slider">
-          <!-- Additional required wrapper -->
-          <div class="swiper-wrapper align-items-center">
-            <div class="swiper-slide d-flex align-items-end">
-              <img src="{% static 'assets/phone-repair.jpg' %}" alt="" />
-              <div class="slide-text-content d-flex flex-column">
-                <h2 class="text-decoration-none">
-                  Professional Repair Services for your Apple Products in the
-                  United Arab Emirates
-                </h2>
-                <h5>Premium out-of-warranty Apple Service Center in Dubai</h5>
-              </div>
-            </div>
-          </div>
-          <!-- If we need navigation buttons -->
-          <div
-            class="d-flex flex-row justify-content-end gap-4 position-relative arrows px-3"
-          >
-            <div class="hero-button-prev">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-arrow-left-square-fill"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"
-                />
-              </svg>
-            </div>
-            <div class="hero-button-next">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-arrow-right-square-fill"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"
-                />
-              </svg>
-            </div>
-          </div>
+<section id="hero">
+  <div class="swiper hero-slider">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper align-items-center">
+      {% for slide in hero_slides %}
+      <div class="swiper-slide d-flex align-items-end">
+        {% if slide.image %}
+        <img src="{{ slide.image.url }}" alt="" />
+        {% elif slide.video %}
+        <video src="{{ slide.video.url }}" autoplay muted loop></video>
+        {% endif %}
+        <div class="slide-text-content d-flex flex-column">
+          <h2 class="text-decoration-none">
+            {{ slide.title }}
+          </h2>
+          <h5>{{ slide.subtitle1 }}</h5>
         </div>
-      </section>
+      </div>
+      {% endfor %}
+    </div>
+    <!-- If we need navigation buttons -->
+    <div class="d-flex flex-row justify-content-end gap-4 position-relative arrows px-3">
+      <div class="hero-button-prev">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+          <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1" />
+        </svg>
+      </div>
+      <div class="hero-button-next">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
+          <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
 
       <section id="services">
         <div class="container">
-          <h1 class="title">Наши услуги</h1>
+          <h1 class="title">{{ services_section.title }}</h1>
 
           <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            {% for tab in services_section.tabs.all %}
             <li class="nav-item" role="presentation">
               <button
-                class="active"
-                id="iphone-repair-tab"
+                class="{% if tab.is_active %}active{% endif %}"
+                id="{{ tab.tab_id }}-tab"
                 data-bs-toggle="pill"
-                data-bs-target="#iphone-repair"
+                data-bs-target="#{{ tab.tab_id }}"
                 type="button"
                 role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
+                aria-controls="{{ tab.tab_id }}"
+                aria-selected="{{ tab.is_active|yesno:'true,false' }}"
               >
-                Ремонт iPhone
+                {{ tab.title }}
               </button>
             </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class=""
-                id="mac-repair-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#mac-repair"
-                type="button"
-                role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
-              >
-                Ремонт Макбуков
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class=""
-                id="tablet-repair-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#tablet-repair"
-                type="button"
-                role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
-              >
-                Ремонт Всех видов Планшетов
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class=""
-                id="imac-repair-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#imac-repair"
-                type="button"
-                role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
-              >
-                Ремонт Моноблоков и iMac
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class=""
-                id="laptop-repair-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#laptop-repair"
-                type="button"
-                role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
-              >
-                Ремонт Ноутбуков и ПК
-              </button>
-            </li>
+            {% endfor %}
           </ul>
+
           <div class="tab-content mt-3 mt-lg-5" id="pills-tabContent">
+            {% for tab in services_section.tabs.all %}
             <div
-              class="tab-pane fade show active"
-              id="iphone-repair"
+              class="tab-pane fade {% if tab.is_active %}show active{% endif %}"
+              id="{{ tab.tab_id }}"
               role="tabpanel"
-              aria-labelledby="iphone-repair-tab"
-              tabindex="0"
+              aria-labelledby="{{ tab.tab_id }}-tab"
             >
               <div class="d-flex flex-column flex-lg-row gap-4 gap-lg-5">
                 <div class="tab-img-cover d-flex flex-column gap-5">
-                  <img src="{% static 'assets/iphones.png' %}" alt="" />
+                  {% if tab.image %}
+                    <img src="{{ tab.image.url }}" alt="{{ tab.title }}" />
+                  {% endif %}
+                  {% for slide in hero_slides %}
                   <div class="d-flex flex-row cta-buttons">
-                    <a href="https://wa.me/971585929333" class="btn-wa">
-                      WhatsApp
-                    </a>
-                    <a
-                      href="tel:+971 58 5929333"
-                      class="btn-call border border-2 border-success"
-                    >
-                      Позвонить
-                    </a>
+                    <a href="{{ slide.whatsapp_link }}" class="btn-wa">{{ slide.whatsapp_text }}</a>
+                    <a href="tel:{{ slide.call_link }}" class="btn-call">{{ slide.call_text }}</a>
                   </div>
                 </div>
+                {% endfor %}
                 <div class="tab-services">
+                  {% for item in tab.items.all %}
                   <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.description }}</p>
                   </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
+                  {% endfor %}
                 </div>
               </div>
             </div>
-            <div
-              class="tab-pane fade"
-              id="mac-repair"
-              role="tabpanel"
-              aria-labelledby="mac-repair-tab"
-              tabindex="0"
-            >
-              <div class="d-flex flex-column flex-lg-row gap-4 gap-lg-5">
-                <div class="tab-img-cover d-flex flex-column gap-5">
-                  <img src="{% static 'assets/macs.png' %}" alt="" />
-                  <div class="d-flex flex-row cta-buttons">
-                    <a href="https://wa.me/971585929333" class="btn-wa">
-                      WhatsApp
-                    </a>
-                    <a
-                      href="tel:+971 58 5929333"
-                      class="btn-call border border-2 border-success"
-                    >
-                      Позвонить
-                    </a>
-                  </div>
-                </div>
-                <div class="tab-services">
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="tablet-repair"
-              role="tabpanel"
-              aria-labelledby="tablet-repair-tab"
-              tabindex="0"
-            >
-              <div class="d-flex flex-column flex-lg-row gap-4 gap-lg-5">
-                <div class="tab-img-cover d-flex flex-column gap-5">
-                  <img src="{% static 'assets/ipads.png' %}" alt="" />
-                  <div class="d-flex flex-row cta-buttons">
-                    <a href="https://wa.me/971585929333" class="btn-wa">
-                      WhatsApp
-                    </a>
-                    <a
-                      href="tel:+971 58 5929333"
-                      class="btn-call border border-2 border-success"
-                    >
-                      Позвонить
-                    </a>
-                  </div>
-                </div>
-                <div class="tab-services">
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="imac-repair"
-              role="tabpanel"
-              aria-labelledby="imac-repair-tab"
-              tabindex="0"
-            >
-              <div class="d-flex flex-column flex-lg-row gap-4 gap-lg-5">
-                <div class="tab-img-cover d-flex flex-column gap-5">
-                  <img src="{% static 'assets/imacs.png' %}" alt="" />
-                  <div class="d-flex flex-row cta-buttons">
-                    <a href="https://wa.me/971585929333" class="btn-wa">
-                      WhatsApp
-                    </a>
-                    <a
-                      href="tel:+971 58 5929333"
-                      class="btn-call border border-2 border-success"
-                    >
-                      Позвонить
-                    </a>
-                  </div>
-                </div>
-                <div class="tab-services">
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="laptop-repair"
-              role="tabpanel"
-              aria-labelledby="laptop-repair-tab"
-              tabindex="0"
-            >
-              <div class="d-flex flex-column flex-lg-row gap-4 gap-lg-5">
-                <div class="tab-img-cover d-flex flex-column gap-5">
-                  <img src="{% static 'assets/laptops.png' %}" alt="" />
-                  <div class="d-flex flex-row cta-buttons">
-                    <a href="https://wa.me/971585929333" class="btn-wa">
-                      WhatsApp
-                    </a>
-                    <a
-                      href="tel:+971 58 5929333"
-                      class="btn-call border border-2 border-success"
-                    >
-                      Позвонить
-                    </a>
-                  </div>
-                </div>
-                <div class="tab-services">
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </section>
@@ -616,152 +266,77 @@
     <footer>
       <div class="container">
         <div class="d-flex flex-column flex-lg-row gap-5">
-          <div class="d-flex flex-column order-1 order-lg-2 contacts">
-            <h3 class="footer-title">Адрес</h3>
 
-            <!-- <h5>GA REPAIR SERVICE</h5> -->
-
-            <div class="d-flex flex-column adress-info gap-3">
-              <a
-                href="https://maps.app.goo.gl/YK9DC7iwyQVBZmBR7"
-                target="_blank"
-                class="d-flex flex-row align-items-center gap-3"
-              >
-                <img src="{% static 'assets/location.svg' %}" alt="" />
-                <span
-                  >Al Barsha 1 Dusseldorf Business Point Office 805 -
-                  Dubai</span
-                >
-              </a>
-              <a
-                href="tel:+971 58 513 8333"
-                target="_blank"
-                class="d-flex flex-row gap-3"
-              >
-                <img src="{% static 'assets/smartphone.svg' %}" alt="" />
-                <span> +971 58 513 8333</span>
-              </a>
-              <a
-                href="mailto:info@geniusahmed.ae"
-                target="_blank"
-                class="d-flex flex-row gap-3"
-              >
-                <img src="{% static 'assets/email.svg' %}" alt="" />
-                <span>info@geniusahmed.ae</span>
-              </a>
-            </div>
-
-            <div class="map">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14450.494538268718!2d55.2050595!3d25.1145986!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6d8ffe75c899%3A0x4bb0786b5b8f748f!2sGenius%20Ahmed%20IT%20Company!5e0!3m2!1sru!2skg!4v1727329576288!5m2!1sru!2skg"
-                width="100%"
-                height="100%"
-                style="border: 0"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-
-            <div class="d-flex flex-row justify-content-center gap-4 payment">
-              <div>
-                <img src="{% static 'assets/visa.svg' %}" alt="" />
-              </div>
-              <div>
-                <img src="{% static 'assets/master.svg' %}" alt="" />
-              </div>
-              <div>
-                <img src="{% static 'assets/apple-pay.svg' %}" alt="" />
-              </div>
-              <div>
-                <img src="{% static 'assets/g-pay.svg' %}" alt="" />
-              </div>
-            </div>
-          </div>
-
-          <div class="d-flex flex-column order-2 order-lg-3 open-hours">
-            <h3 class="footer-title">Время работы</h3>
-
+          <!-- About Section -->
+          <div class="d-flex flex-column order-3 order-lg-1 col-12 col-lg-4 footer-about">
             <div class="d-flex flex-column">
-              <div class="d-flex flex-row">
-                <span>Понедельник</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Вторник</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Среда</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Четверг</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Пятница</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Суббота</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Воскресенье</span>
-                <span>Выходной</span>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="d-flex flex-column order-3 order-lg-1 col-12 col-lg-4 footer-about"
-          >
-            <div class="d-flex flex-column">
-              <img src="{% static 'assets/GA-Logo.png' %}" alt="" />
-              <p>
-                <strong> GA REPAIR SERVICE </strong>специализируется на широком
-                спектре современных технологических и информационных решений,
-                охватывающих следующие направления деятельности: Программные
-                услуги | Аппаратные услуги | Цифровой маркетинг | ИТ-служба
-                поддержки | Умные дома | Кибербезопасность | Системы
-                видеонаблюдения и безопасности | Системы контроля доступа. В
-                Genius Ahmed мы стремимся к инновационным решениям, которые
-                выводят ваш бизнес и дом на новый уровень современных
-                технологий. Наши услуги ориентированы на клиента и предоставляют
-                высококачественные решения для повышения эффективности и
-                безопасности.
-              </p>
+              <img src="{{ footer.logo.url }}" alt="Company Logo" />
+              <p>{{ footer.about_text }}</p>
               <div class="d-flex flex-row justify-content-center gap-3 smn">
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/instagram.jpeg' %}" alt="" />
+                {% for social in footer.socials.all %}
+                <a href="{{ social.url }}" target="_blank">
+                  <img src="{{ social.icon.url }}" alt="{{ social.name }}" />
                 </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/facebook.svg' %}" alt="" />
-                </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/sl_z_072523_61700_01.jpg' %}" alt="" />
-                </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/tiktok.jpeg' %}" alt="" />
-                </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/youtube.svg' %}" alt="" />
-                </a>
+                {% endfor %}
               </div>
             </div>
           </div>
+
+          <!-- Contact Info -->
+          <div class="d-flex flex-column order-1 order-lg-2 contacts">
+            <h3 class="footer-title">{{ footer.title_address }}</h3>
+            <div class="d-flex flex-column adress-info gap-3">
+              <a href="{{ footer.address.first.link }}" target="_blank" class="d-flex flex-row align-items-center gap-3">
+                <img src="{{ footer.address.first.logo.url }}" alt="" />
+                <span>{{ footer.address.first.address }}</span>
+              </a>
+              <a href="{{ footer.phone.first.link }}" target="_blank" class="d-flex flex-row gap-3">
+                <img src="{{ footer.phone.first.logo.url }}" alt="" />
+                <span>{{ footer.phone.first.phone }}</span>
+              </a>
+              <a href="{{ footer.email.first.link }}" target="_blank" class="d-flex flex-row gap-3">
+                <img src="{{ footer.email.first.logo.url }}" alt="" />
+                <span>{{ footer.email.first.email }}</span>
+              </a>
+            </div>
+            <div class="map">
+                {{ footer.address.first.map_iframe|safe }}
+            </div>
+            <div class="d-flex flex-row justify-content-center gap-4 payment">
+              {% for payment in footer.payment_methods.all %}
+              <div><img src="{{ payment.icon.url }}" alt="Payment Method" /></div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Working Hours -->
+          <div class="d-flex flex-column order-2 order-lg-3 open-hours">
+            <h3 class="footer-title">{{ footer.title_work_time }}</h3>
+            <div class="d-flex flex-column">
+              {% for hour in footer.work_hours.all %}
+              <div class="d-flex flex-row">
+                <span>{{ hour.day }}</span>
+                {% if hour.is_closed %}
+                <span>Выходной</span>
+                {% else %}
+                <span>{{ hour.open_time }} - {{ hour.close_time }}</span>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
         </div>
       </div>
     </footer>
 
     <div class="widgets">
-        <a href="https://wa.me/+123123123">
-            <img src="{% static 'assets/whatsapp.png' %}" alt="">
-        </a>
-        <a href="tel:+123123123">
-            <img src="{% static 'assets/call_img.png' %}" alt="">
-        </a>
+      <a href="{{ footer.phone.first.link }}">
+          <img src="{% static 'assets/whatsapp.png' %}" alt="">
+      </a>
+      <a href="{{ footer.phone.first.link }}">
+          <img src="{% static 'assets/call_img.png' %}" alt="">
+      </a>
     </div>
   </body>
 

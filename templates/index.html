@@ -1,10 +1,14 @@
 {% load static %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="{{ site_meta.meta_description }}"/>
+    <meta name="title" content="{{ site_meta.meta_title }}"/>
+    <meta name="image" content="{% if site_meta.meta_image %}{{ site_meta.meta_image.url }}{% endif %}"/>
     <title>GA REPAIR SERVICE</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -26,7 +30,7 @@
       <nav class="navbar navbar-expand-lg">
         <div class="container align-items-center">
           <a class="navbar-brand" href="#">
-            <img src="{% static 'assets/GA-Logo.png' %}" alt="" />
+            <img src="{{ footer.logo.url }}" alt="" />
           </a>
           <button
             class="navbar-toggler"
@@ -46,7 +50,7 @@
           >
             <div class="offcanvas-header">
               <div class="navbar-brand">
-                <img src="{% static 'assets/GA-Logo.png' %}" alt="" />
+                <img src="{{ footer.logo.url }}" alt="" />
               </div>
               <button
                 type="button"
@@ -61,8 +65,9 @@
               <div
                 class="d-flex mt-4 mt-lg-0 flex-column flex-lg-row gap-5 flex-lg-grow-1 align-items-lg-center justify-content-lg-center w-100"
               >
+                {% for contact in contact_info %}
                 <a
-                  href="tel:+971 58 5929333"
+                  href="{{ contact.phone_link }}"
                   class="d-flex flex-row align-items-center gap-3 gap-lg-4 call-us-header"
                 >
                   <svg
@@ -79,13 +84,11 @@
                   </svg>
 
                   <div class="d-flex flex-column">
-                      {% for contact in contact_info %}
                           <h5>{{ contact.title }}</h5>
                           <span>{{ contact.phone_number }}</span>
-                      {% endfor %}
                   </div>
                 </a>
-
+                {% endfor %}
                 <div class="d-flex flex-row align-items-center gap-3 gap-lg-4 open-hours-header">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -104,8 +107,10 @@
                   </svg>
 
                   <div class="d-flex flex-column">
-                    <h5>Opening Hours</h5>
-                    <span>Mon-Sat: 10:00–20:00 Sun: CLOSED</span>
+                    {% for contact in contact_info %}
+                    <h5>{{ contact.opening_time_title }}</h5>
+                    <span>{{ contact.opening_days }}</span>
+                    {% endfor %}
                   </div>
                 </div>
                 <div class="">
@@ -116,37 +121,47 @@
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      Русский
+                      {% if request.LANGUAGE_CODE == 'ru' %}
+                        Русский
+                      {% elif request.LANGUAGE_CODE == 'en' %}
+                        English
+                      {% else %}
+                        {{ request.LANGUAGE_CODE }}
+                      {% endif %}
                     </button>
                     <ul class="dropdown-menu">
                       <li>
-                        <a class="active" href="/ru">РУ</a>
+                        <a class="{% if request.LANGUAGE_CODE == 'ru' %}active{% endif %}" href="/ru">РУ</a>
                       </li>
                       <li>
-                        <a href="/en">EN</a>
+                        <a class="{% if request.LANGUAGE_CODE == 'en' %}active{% endif %}" href="/en">EN</a>
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
-              <ul
-                class="navbar-nav justify-content-end justify-content-lg-center w-lg-100 pe-3 flex-lg-grow-1"
-              >
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="{% url 'index' %}"
-                    >Главная</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'service' %}">Услуги</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'about' %}">О нас</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'contact' %}">Контакты</a>
-                </li>
-              </ul>
+<ul class="navbar-nav justify-content-end justify-content-lg-center w-lg-100 pe-3 flex-lg-grow-1">
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'index' %}">
+      {{ navigation.home }}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'service' %}active{% endif %}" href="{% url 'service' %}">
+      {{ navigation.services }}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">
+      {{ navigation.about_us }}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">
+      {{ navigation.contacts }}
+    </a>
+  </li>
+</ul>
             </div>
           </div>
         </div>
@@ -157,2276 +172,390 @@
         <div class="swiper hero-slider">
           <!-- Additional required wrapper -->
           <div class="swiper-wrapper align-items-center">
+            {% for slide in hero_slides %}
             <div class="swiper-slide">
-              <img src="{% static 'assets/phone-repair.jpg' %}" alt="" />
+              {% if slide.image %}
+                <img src="{{ slide.image.url }}" alt="" />
+              {% elif slide.video %}
+                <video src="{{ slide.video.url }}" autoplay muted loop></video>
+              {% endif %}
               <div class="slide-text-content d-flex flex-column">
-                <h2>
-                  Professional Repair Services for your Apple Products in the
-                  United Arab Emirates
-                </h2>
-                <h5>Premium out-of-warranty Apple Service Center in Dubai</h5>
-                <h5>
-                  Visit our service center to avail repair services for your
-                  iPhone, iPad, MacBook, iMac, Laptop, and more!
-                </h5>
+                <h2>{{ slide.title }}</h2>
+                <h5>{{ slide.subtitle1 }}</h5>
+                <h5>{{ slide.subtitle2 }}</h5>
                 <div class="d-flex flex-row cta-buttons">
-                  <a href="https://wa.me/971585929333" class="btn-wa">
-                    WhatsApp Now
-                  </a>
-                  <a href="tel:+971 58 5929333" class="btn-call"> Call Now </a>
+                  <a href="{{ slide.whatsapp_link }}" class="btn-wa">{{ slide.whatsapp_text }}</a>
+                  <a href="{{ slide.call_link }}" class="btn-call">{{ slide.call_text }}</a>
                 </div>
 
-                <p>Best in town Computer and Mobile Phone Repair Shop</p>
+                <p>{{ slide.best_in_town_text }}</p>
 
                 <div class="d-flex flex-row gap-3 google-rating">
-                  <span>Rated 4.9 with 34 reviews </span>
+                  <span>{{ slide.rating_text }}</span>
                   <div class="d-flex flex-row rating gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
+                    {% for _ in "12345" %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f0ad4e" class="bi bi-star-fill" viewBox="0 0 16 16">
+                      <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
                     </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
+                    {% endfor %}
                   </div>
                 </div>
 
-                <div
-                  class="d-flex flex-row flex-wrap gap-3 justify-content-center advantages"
-                >
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-person-gear"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"
-                      />
-                    </svg>
-                    <span>Professional team</span>
+                <!-- Преимущества -->
+                <div class="d-flex flex-row flex-wrap gap-3 justify-content-center advantages">
+                  {% for advantage in slide.advantages.all %}
+                  <div class="d-flex flex-column align-items-center gap-2 text-white">
+                    <img src="{{ advantage.icon.url }}" alt="icon"/>
+                    <span>{{ advantage.text }}</span>
                   </div>
-
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-cpu-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"
-                      />
-                      <path
-                        d="M5.5.5a.5.5 0 0 0-1 0V2A2.5 2.5 0 0 0 2 4.5H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2A2.5 2.5 0 0 0 4.5 14v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14a2.5 2.5 0 0 0 2.5-2.5h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14A2.5 2.5 0 0 0 11.5 2V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1zm1 4.5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3A1.5 1.5 0 0 1 6.5 5"
-                      />
-                    </svg>
-                    <span>All problems solvers</span>
-                  </div>
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-speedometer"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707M2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.39.39 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.39.39 0 0 0-.029-.518z"
-                      />
-                      <path
-                        fill-rule="evenodd"
-                        d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.95 11.95 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0"
-                      />
-                    </svg>
-                    <span>Fast delivery</span>
-                  </div>
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-shield-fill-check"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m2.146 5.146a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793z"
-                      />
-                    </svg>
-                    <span>Quality is our aim</span>
-                  </div>
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-award-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="m8 0 1.669.864 1.858.282.842 1.68 1.337 1.32L13.4 6l.306 1.854-1.337 1.32-.842 1.68-1.858.282L8 12l-1.669-.864-1.858-.282-.842-1.68-1.337-1.32L2.6 6l-.306-1.854 1.337-1.32.842-1.68L6.331.864z"
-                      />
-                      <path
-                        d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1z"
-                      />
-                    </svg>
-                    <span>Более 7 лет на рынке</span>
-                  </div>
+                  {% endfor %}
                 </div>
               </div>
             </div>
-            <div class="swiper-slide">
-              <img src="{% static 'assets/mac-repair.webp'%}" alt="" />
-              <div class="slide-text-content d-flex flex-column">
-                <h2>
-                  Professional Repair Services for your Apple Products in the
-                  United Arab Emirates
-                </h2>
-                <h5>Premium out-of-warranty Apple Service Center in Dubai</h5>
-                <h5>
-                  Visit our service center to avail repair services for your
-                  iPhone, iPad, MacBook, iMac, Laptop, and more!
-                </h5>
-                <div class="d-flex flex-row cta-buttons">
-                  <a href="https://wa.me/971585929333" class="btn-wa">
-                    WhatsApp Now
-                  </a>
-                  <a href="tel:+971 58 5929333" class="btn-call"> Call Now </a>
-                </div>
-
-                <p>Best in town Computer and Mobile Phone Repair Shop</p>
-
-                <div class="d-flex flex-row gap-3 google-rating">
-                  <span>Rated 4.9 with 34 reviews </span>
-                  <div class="d-flex flex-row rating gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
-                <div class="d-flex flex-row advantages">
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-person-gear"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"
-                      />
-                    </svg>
-                    <span>Professional team</span>
-                  </div>
-
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-cpu-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"
-                      />
-                      <path
-                        d="M5.5.5a.5.5 0 0 0-1 0V2A2.5 2.5 0 0 0 2 4.5H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2A2.5 2.5 0 0 0 4.5 14v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14a2.5 2.5 0 0 0 2.5-2.5h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14A2.5 2.5 0 0 0 11.5 2V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1zm1 4.5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3A1.5 1.5 0 0 1 6.5 5"
-                      />
-                    </svg>
-                    <span>All problems solvers</span>
-                  </div>
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-speedometer"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707M2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.39.39 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.39.39 0 0 0-.029-.518z"
-                      />
-                      <path
-                        fill-rule="evenodd"
-                        d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.95 11.95 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0"
-                      />
-                    </svg>
-                    <span>Fast delivery</span>
-                  </div>
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-shield-fill-check"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m2.146 5.146a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793z"
-                      />
-                    </svg>
-                    <span>Quality is our aim</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <img src="{% static 'assets/phone-repair-banner.png'%}" alt="" />
-              <div class="slide-text-content d-flex flex-column">
-                <h2>
-                  Professional Repair Services for your Apple Products in the
-                  United Arab Emirates
-                </h2>
-                <h5>Premium out-of-warranty Apple Service Center in Dubai</h5>
-                <h5>
-                  Visit our service center to avail repair services for your
-                  iPhone, iPad, MacBook, iMac, Laptop, and more!
-                </h5>
-                <div class="d-flex flex-row cta-buttons">
-                  <a href="https://wa.me/971585929333" class="btn-wa">
-                    WhatsApp Now
-                  </a>
-                  <a href="tel:+971 58 5929333" class="btn-call"> Call Now </a>
-                </div>
-
-                <p>Best in town Computer and Mobile Phone Repair Shop</p>
-
-                <div class="d-flex flex-row gap-3 google-rating">
-                  <span>Rated 4.9 with 34 reviews </span>
-                  <div class="d-flex flex-row rating gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
-                <div class="d-flex flex-row advantages">
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-person-gear"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"
-                      />
-                    </svg>
-                    <span>Professional team</span>
-                  </div>
-
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-cpu-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"
-                      />
-                      <path
-                        d="M5.5.5a.5.5 0 0 0-1 0V2A2.5 2.5 0 0 0 2 4.5H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2A2.5 2.5 0 0 0 4.5 14v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14a2.5 2.5 0 0 0 2.5-2.5h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14A2.5 2.5 0 0 0 11.5 2V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1zm1 4.5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3A1.5 1.5 0 0 1 6.5 5"
-                      />
-                    </svg>
-                    <span>All problems solvers</span>
-                  </div>
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-speedometer"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707M2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.39.39 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.39.39 0 0 0-.029-.518z"
-                      />
-                      <path
-                        fill-rule="evenodd"
-                        d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.95 11.95 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0"
-                      />
-                    </svg>
-                    <span>Fast delivery</span>
-                  </div>
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-shield-fill-check"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m2.146 5.146a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793z"
-                      />
-                    </svg>
-                    <span>Quality is our aim</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <video
-                src="{% static 'assets/SampleVideo_1280x720_2mb.mp4' %}"
-                muted
-                autoplay
-                playsinline
-                loop
-              ></video>
-              <div class="slide-text-content d-flex flex-column">
-                <h2>
-                  Professional Repair Services for your Apple Products in the
-                  United Arab Emirates
-                </h2>
-                <h5>Premium out-of-warranty Apple Service Center in Dubai</h5>
-                <h5>
-                  Visit our service center to avail repair services for your
-                  iPhone, iPad, MacBook, iMac, Laptop, and more!
-                </h5>
-                <div class="d-flex flex-row cta-buttons">
-                  <a href="https://wa.me/971585929333" class="btn-wa">
-                    WhatsApp Now
-                  </a>
-                  <a href="tel:+971 58 5929333" class="btn-call"> Call Now </a>
-                </div>
-
-                <p>Best in town Computer and Mobile Phone Repair Shop</p>
-
-                <div class="d-flex flex-row gap-3 google-rating">
-                  <span>Rated 4.9 with 34 reviews </span>
-                  <div class="d-flex flex-row rating gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="#f0ad4e"
-                      class="bi bi-star-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
-                <div class="d-flex flex-row advantages">
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-person-gear"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"
-                      />
-                    </svg>
-                    <span>Professional team</span>
-                  </div>
-
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-cpu-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"
-                      />
-                      <path
-                        d="M5.5.5a.5.5 0 0 0-1 0V2A2.5 2.5 0 0 0 2 4.5H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2A2.5 2.5 0 0 0 4.5 14v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14a2.5 2.5 0 0 0 2.5-2.5h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14A2.5 2.5 0 0 0 11.5 2V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1zm1 4.5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3A1.5 1.5 0 0 1 6.5 5"
-                      />
-                    </svg>
-                    <span>All problems solvers</span>
-                  </div>
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-speedometer"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707M2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.39.39 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.39.39 0 0 0-.029-.518z"
-                      />
-                      <path
-                        fill-rule="evenodd"
-                        d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.95 11.95 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0"
-                      />
-                    </svg>
-                    <span>Fast delivery</span>
-                  </div>
-                  <div
-                    class="d-flex flex-column align-items-center gap-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-shield-fill-check"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m2.146 5.146a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793z"
-                      />
-                    </svg>
-                    <span>Quality is our aim</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- If we need navigation buttons -->
-          <div
-            class="d-flex flex-row justify-content-end gap-4 position-relative arrows px-3"
-          >
-            <div class="hero-button-prev">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-arrow-left-square-fill"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"
-                />
-              </svg>
-            </div>
-            <div class="hero-button-next">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-arrow-right-square-fill"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"
-                />
-              </svg>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </section>
 
+
       <section id="features">
         <div class="container">
           <h1 class="title">
-            Что вы желаете исправить вместе с <span>GA</span>?
+            {{ features_section.title|safe }}
           </h1>
 
           <div class="features-grid">
+            {% for item in features_section.feature_items.all %}
             <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/iphones.png' %}" alt="" />
-                <p>iPhone</p>
+              <a target="_blank" href="{{ item.link }}">
+                <img src="{{ item.image.url }}" alt="{{ item.title }}" />
+                <p>{{ item.title }}</p>
               </a>
             </div>
-            <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/ipads.png' %}" alt="" />
-                <p>iPad</p>
-              </a>
-            </div>
-            <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/macs.png' %}" alt="" />
-                <p>MacBook</p>
-              </a>
-            </div>
-            <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/imacs.png' %}" alt="" />
-                <p>iMac</p>
-              </a>
-            </div>
-            <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/laptops.png' %}" alt="" />
-                <p>Ноутбук или ПК</p>
-              </a>
-            </div>
-            <div class="grid-item">
-              <a target="_blank" href="https://wa.me/">
-                <img src="{% static 'assets/consoles.png' %}" alt="" />
-                <p>Игровые консоли</p>
-              </a>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </section>
 
       <section id="services">
         <div class="container">
-          <h1 class="title">Наши услуги</h1>
+          <h1 class="title">{{ services_section.title }}</h1>
 
           <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            {% for tab in services_section.tabs.all %}
             <li class="nav-item" role="presentation">
               <button
-                class="active"
-                id="iphone-repair-tab"
+                class="{% if tab.is_active %}active{% endif %}"
+                id="{{ tab.tab_id }}-tab"
                 data-bs-toggle="pill"
-                data-bs-target="#iphone-repair"
+                data-bs-target="#{{ tab.tab_id }}"
                 type="button"
                 role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
+                aria-controls="{{ tab.tab_id }}"
+                aria-selected="{{ tab.is_active|yesno:'true,false' }}"
               >
-                Ремонт iPhone
+                {{ tab.title }}
               </button>
             </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class=""
-                id="mac-repair-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#mac-repair"
-                type="button"
-                role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
-              >
-                Ремонт Макбуков
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class=""
-                id="tablet-repair-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#tablet-repair"
-                type="button"
-                role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
-              >
-                Ремонт Всех видов Планшетов
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class=""
-                id="imac-repair-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#imac-repair"
-                type="button"
-                role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
-              >
-                Ремонт Моноблоков и iMac
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class=""
-                id="laptop-repair-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#laptop-repair"
-                type="button"
-                role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
-              >
-                Ремонт Ноутбуков и ПК
-              </button>
-            </li>
+            {% endfor %}
           </ul>
+
           <div class="tab-content mt-3 mt-lg-5" id="pills-tabContent">
+            {% for tab in services_section.tabs.all %}
             <div
-              class="tab-pane fade show active"
-              id="iphone-repair"
+              class="tab-pane fade {% if tab.is_active %}show active{% endif %}"
+              id="{{ tab.tab_id }}"
               role="tabpanel"
-              aria-labelledby="iphone-repair-tab"
-              tabindex="0"
+              aria-labelledby="{{ tab.tab_id }}-tab"
             >
               <div class="d-flex flex-column flex-lg-row gap-4 gap-lg-5">
                 <div class="tab-img-cover d-flex flex-column gap-5">
-                  <img src="{% static 'assets/iphones.png' %}" alt="" />
+                  {% if tab.image %}
+                    <img src="{{ tab.image.url }}" alt="{{ tab.title }}" />
+                  {% endif %}
+                  {% for slide in hero_slides %}
                   <div class="d-flex flex-row cta-buttons">
-                    <a href="https://wa.me/971585929333" class="btn-wa">
-                      WhatsApp
-                    </a>
-                    <a
-                      href="tel:+971 58 5929333"
-                      class="btn-call border border-2 border-success"
-                    >
-                      Позвонить
-                    </a>
+                    <a href="{{ slide.whatsapp_link }}" class="btn-wa">{{ slide.whatsapp_text }}</a>
+                    <a href="tel:{{ slide.call_link }}" class="btn-call">{{ slide.call_text }}</a>
                   </div>
                 </div>
+                {% endfor %}
                 <div class="tab-services">
+                  {% for item in tab.items.all %}
                   <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.description }}</p>
                   </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
+                  {% endfor %}
                 </div>
               </div>
             </div>
-            <div
-              class="tab-pane fade"
-              id="mac-repair"
-              role="tabpanel"
-              aria-labelledby="mac-repair-tab"
-              tabindex="0"
-            >
-              <div class="d-flex flex-column flex-lg-row gap-4 gap-lg-5">
-                <div class="tab-img-cover d-flex flex-column gap-5">
-                  <img src="{% static 'assets/macs.png' %}" alt="" />
-                  <div class="d-flex flex-row cta-buttons">
-                    <a href="https://wa.me/971585929333" class="btn-wa">
-                      WhatsApp
-                    </a>
-                    <a
-                      href="tel:+971 58 5929333"
-                      class="btn-call border border-2 border-success"
-                    >
-                      Позвонить
-                    </a>
-                  </div>
-                </div>
-                <div class="tab-services">
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="tablet-repair"
-              role="tabpanel"
-              aria-labelledby="tablet-repair-tab"
-              tabindex="0"
-            >
-              <div class="d-flex flex-column flex-lg-row gap-4 gap-lg-5">
-                <div class="tab-img-cover d-flex flex-column gap-5">
-                  <img src="{% static 'assets/ipads.png' %}" alt="" />
-                  <div class="d-flex flex-row cta-buttons">
-                    <a href="https://wa.me/971585929333" class="btn-wa">
-                      WhatsApp
-                    </a>
-                    <a
-                      href="tel:+971 58 5929333"
-                      class="btn-call border border-2 border-success"
-                    >
-                      Позвонить
-                    </a>
-                  </div>
-                </div>
-                <div class="tab-services">
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="imac-repair"
-              role="tabpanel"
-              aria-labelledby="imac-repair-tab"
-              tabindex="0"
-            >
-              <div class="d-flex flex-column flex-lg-row gap-4 gap-lg-5">
-                <div class="tab-img-cover d-flex flex-column gap-5">
-                  <img src="{% static 'assets/imacs.png' %}" alt="" />
-                  <div class="d-flex flex-row cta-buttons">
-                    <a href="https://wa.me/971585929333" class="btn-wa">
-                      WhatsApp
-                    </a>
-                    <a
-                      href="tel:+971 58 5929333"
-                      class="btn-call border border-2 border-success"
-                    >
-                      Позвонить
-                    </a>
-                  </div>
-                </div>
-                <div class="tab-services">
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="laptop-repair"
-              role="tabpanel"
-              aria-labelledby="laptop-repair-tab"
-              tabindex="0"
-            >
-              <div class="d-flex flex-column flex-lg-row gap-4 gap-lg-5">
-                <div class="tab-img-cover d-flex flex-column gap-5">
-                  <img src="{% static 'assets/laptops.png' %}" alt="" />
-                  <div class="d-flex flex-row cta-buttons">
-                    <a href="https://wa.me/971585929333" class="btn-wa">
-                      WhatsApp
-                    </a>
-                    <a
-                      href="tel:+971 58 5929333"
-                      class="btn-call border border-2 border-success"
-                    >
-                      Позвонить
-                    </a>
-                  </div>
-                </div>
-                <div class="tab-services">
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                  <div class="tab-service-item d-flex flex-column gap-3">
-                    <h3>Ремонт Дисплея iPhone</h3>
-                    <p>
-                      <strong>Треснутый экран</strong> — одна из самых
-                      распространенных проблем с iPhone. Иногда это также влияет
-                      на функциональность сенсора и делает iPhone
-                      неработоспособным. Мы храним большинство
-                      <strong>экранов iPhone</strong> на складе и можем заменить
-                      ваш
-                      <strong>сломанный экран iPhone</strong>
-                      примерно за 30 минут, если вы посетите наш магазин.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </section>
+
       <article>
         <section id="banner-section">
           <div class="banner-bg">
             <div class="container">
-              <h1 class="banner-title">
-                Внимание к деталям и индивидуальный подход к каждому клиенту
-              </h1>
+              <h1 class="banner-title">{{ banner_section.title }}</h1>
 
-              <p>
-                Как ведущий сервис по ремонту компьютеров и мобильных телефонов
-                в Дубае, мы предлагаем решение любых проблем с вашими
-                устройствами — от замены экранов до сложного ремонта материнских
-                плат. Более 100,000 довольных клиентов доверяют нам за высокое
-                качество ремонта, доступные цены и исключительный уровень
-                обслуживания. Оцените наш премиальный сервис в нашем Apple
-                Service Center в Дубае и верните своему устройству идеальное
-                состояние уже сегодня.
-              </p>
+              <p>{{ banner_section.description }}</p>
 
+              {% for slide in hero_slides %}
               <div class="d-flex flex-row justify-content-center cta-buttons">
-                <a href="https://wa.me/971585929333" class="btn-wa">
-                  WhatsApp
-                </a>
-                <a href="tel:+971 58 5929333" class="btn-call"> Позвонить </a>
+                <a href="{{ slide.whatsapp_link }}" class="btn-wa">{{ slide.whatsapp_text }}</a>
+                <a href="tel:{{ slide.call_link }}" class="btn-call">{{ slide.call_text }}</a>
               </div>
+              {% endfor %}
             </div>
           </div>
         </section>
 
         <section id="why-choose-us">
           <div class="container">
-            <h1 class="title">Почему стоит выбрать GA?</h1>
+            <h1 class="title">{{ why_choose_us.title }}</h1>
 
             <div class="advantages-grid">
-              <div
-                class="d-flex flex-column align-items-center justify-content-center advantage-grid__item"
-              >
+              {% for advantage in why_choose_us.advantages.all %}
+              <div class="d-flex flex-column align-items-center justify-content-center advantage-grid__item">
                 <span>
-                  <img src="{% static 'assets/save-money.svg' %}" alt="" />
+                  <img src="{{ advantage.image.url }}" alt="" />
                 </span>
-                <h5>Экономьте время и деньги</h5>
-                <p>
-                  Обратившись в наш сервис, вы не только сэкономите деньги
-                  благодаря доступным ценам, но и значительно сбережёте время —
-                  большинство ремонтов выполняются в течение часа. Доверьте нам
-                  свои устройства и получите качественный результат быстро и без
-                  лишних затрат.
-                </p>
+                <h5>{{ advantage.title }}</h5>
+                <p>{{ advantage.description }}</p>
               </div>
-              <div
-                class="d-flex flex-column align-items-center justify-content-center advantage-grid__item"
-              >
-                <span>
-                  <img src="{% static 'assets/save-money.svg' %}" alt="" />
-                </span>
-                <h5>Экономьте время и деньги</h5>
-                <p>
-                  Обратившись в наш сервис, вы не только сэкономите деньги
-                  благодаря доступным ценам, но и значительно сбережёте время —
-                  большинство ремонтов выполняются в течение часа. Доверьте нам
-                  свои устройства и получите качественный результат быстро и без
-                  лишних затрат.
-                </p>
-              </div>
-              <div
-                class="d-flex flex-column align-items-center justify-content-center advantage-grid__item"
-              >
-                <span>
-                  <img src="{% static 'assets/save-money.svg' %}" alt="" />
-                </span>
-                <h5>Экономьте время и деньги</h5>
-                <p>
-                  Обратившись в наш сервис, вы не только сэкономите деньги
-                  благодаря доступным ценам, но и значительно сбережёте время —
-                  большинство ремонтов выполняются в течение часа. Доверьте нам
-                  свои устройства и получите качественный результат быстро и без
-                  лишних затрат.
-                </p>
-              </div>
-              <div
-                class="d-flex flex-column align-items-center justify-content-center advantage-grid__item"
-              >
-                <span>
-                  <img src="{% static 'assets/save-money.svg' %}" alt="" />
-                </span>
-                <h5>Экономьте время и деньги</h5>
-                <p>
-                  Обратившись в наш сервис, вы не только сэкономите деньги
-                  благодаря доступным ценам, но и значительно сбережёте время —
-                  большинство ремонтов выполняются в течение часа. Доверьте нам
-                  свои устройства и получите качественный результат быстро и без
-                  лишних затрат.
-                </p>
-              </div>
-              <div
-                class="d-flex flex-column align-items-center justify-content-center advantage-grid__item"
-              >
-                <span>
-                  <img src="{% static 'assets/save-money.svg' %}" alt="" />
-                </span>
-                <h5>Экономьте время и деньги</h5>
-                <p>
-                  Обратившись в наш сервис, вы не только сэкономите деньги
-                  благодаря доступным ценам, но и значительно сбережёте время —
-                  большинство ремонтов выполняются в течение часа. Доверьте нам
-                  свои устройства и получите качественный результат быстро и без
-                  лишних затрат.
-                </p>
-              </div>
-              <div
-                class="d-flex flex-column align-items-center justify-content-center advantage-grid__item"
-              >
-                <span>
-                  <img src="{% static 'assets/save-money.svg' %}" alt="" />
-                </span>
-                <h5>Экономьте время и деньги</h5>
-                <p>
-                  Обратившись в наш сервис, вы не только сэкономите деньги
-                  благодаря доступным ценам, но и значительно сбережёте время —
-                  большинство ремонтов выполняются в течение часа. Доверьте нам
-                  свои устройства и получите качественный результат быстро и без
-                  лишних затрат.
-                </p>
-              </div>
-              <div
-                class="d-flex flex-column align-items-center justify-content-center advantage-grid__item"
-              >
-                <span>
-                  <img src="{% static 'assets/save-money.svg' %}" alt="" />
-                </span>
-                <h5>Экономьте время и деньги</h5>
-                <p>
-                  Обратившись в наш сервис, вы не только сэкономите деньги
-                  благодаря доступным ценам, но и значительно сбережёте время —
-                  большинство ремонтов выполняются в течение часа. Доверьте нам
-                  свои устройства и получите качественный результат быстро и без
-                  лишних затрат.
-                </p>
-              </div>
-              <div
-                class="d-flex flex-column align-items-center justify-content-center advantage-grid__item"
-              >
-                <span>
-                  <img src="{% static 'assets/save-money.svg' %}" alt="" />
-                </span>
-                <h5>Экономьте время и деньги</h5>
-                <p>
-                  Обратившись в наш сервис, вы не только сэкономите деньги
-                  благодаря доступным ценам, но и значительно сбережёте время —
-                  большинство ремонтов выполняются в течение часа. Доверьте нам
-                  свои устройства и получите качественный результат быстро и без
-                  лишних затрат.
-                </p>
-              </div>
+              {% endfor %}
             </div>
           </div>
         </section>
       </article>
 
-      <section id="statistics">
-        <div class="container">
-          <div class="title">GA в цифрах</div>
-
-          <div class="d-flex flex-column justify-content-center flex-lg-row gap-5 counts">
-            <div class="d-flex flex-column align-items-center">
-              <span>
-                <img src="{% static 'assets/tech-service.svg' %}" alt="" />
-              </span>
-              <p>
-                <span class="counter" data-target="177654">177654</span>
-              </p>
-              <h5>Устройств отремонтировано</h5>
-            </div>
-            <div class="d-flex flex-column align-items-center">
-              <span>
-                <img src="{% static 'assets/experience.svg' %}" alt="" />
-              </span>
-              <p>
-                <span class="counter" data-target="7">7</span>
-              </p>
-              <h5>Лет на рынке</h5>
-            </div>
-            <div class="d-flex flex-column align-items-center">
-              <span>
-                <img src="{% static 'assets/happy-customer.svg' %}" alt="" />
-              </span>
-              <p>
-                <span class="counter" data-target="100">100</span>
-                %
-              </p>
-              <h5>Довольных клиентов</h5>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="faqs">
-        <div class="container">
-          <h1 class="title">Часто задаваемые вопросы</h1>
-
-          <div class="qa-cover">
-            <div class="accordion accordion-flush" id="accordionFlushExample">
-              <div class="accordion-item">
-                <h2 class="accordion-header">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#flush-collapseOne"
-                    aria-expanded="false"
-                    aria-controls="flush-collapseOne"
-                  >
-                    Question 1
-                  </button>
-                </h2>
-                <div
-                  id="flush-collapseOne"
-                  class="accordion-collapse collapse"
-                  data-bs-parent="#accordionFlushExample"
-                >
-                  <div class="accordion-body">Answer 1</div>
-                </div>
-              </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#flush-collapseTwo"
-                    aria-expanded="false"
-                    aria-controls="flush-collapseTwo"
-                  >
-                    Question 2
-                  </button>
-                </h2>
-                <div
-                  id="flush-collapseTwo"
-                  class="accordion-collapse collapse"
-                  data-bs-parent="#accordionFlushExample"
-                >
-                  <div class="accordion-body">Answer 2</div>
-                </div>
-              </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#flush-collapseThree"
-                    aria-expanded="false"
-                    aria-controls="flush-collapseThree"
-                  >
-                    Question 3
-                  </button>
-                </h2>
-                <div
-                  id="flush-collapseThree"
-                  class="accordion-collapse collapse"
-                  data-bs-parent="#accordionFlushExample"
-                >
-                  <div class="accordion-body">answer 3</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="banner-section">
-        <div class="banner-bg">
+        <section id="statistics">
           <div class="container">
-            <h1 class="banner-title">
-              Внимание к деталям и индивидуальный подход к каждому клиенту
-            </h1>
+            <div class="title">{{ statistics_section.title }}</div>
 
-            <p>
-              Как ведущий сервис по ремонту компьютеров и мобильных телефонов в
-              Дубае, мы предлагаем решение любых проблем с вашими устройствами —
-              от замены экранов до сложного ремонта материнских плат. Более
-              100,000 довольных клиентов доверяют нам за высокое качество
-              ремонта, доступные цены и исключительный уровень обслуживания.
-              Оцените наш премиальный сервис в нашем Apple Service Center в
-              Дубае и верните своему устройству идеальное состояние уже сегодня.
-            </p>
-
-            <div class="d-flex flex-row justify-content-center cta-buttons">
-              <a href="https://wa.me/971585929333" class="btn-wa"> WhatsApp </a>
-              <a href="tel:+971 58 5929333" class="btn-call"> Позвонить </a>
+            <div class="d-flex flex-column justify-content-center flex-lg-row gap-5 counts">
+              {% for statistic in statistics_section.statistics.all %}
+              <div class="d-flex flex-column align-items-center">
+                <span>
+                  <img src="{{ statistic.icon.url }}" alt="" />
+                </span>
+                <p>
+                  <span class="counter" data-target="{{ statistic.value }}">{{ statistic.value }}</span>
+                </p>
+                <h5>{{ statistic.title }}</h5>
+              </div>
+              {% endfor %}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="google-reviews">
-        <div class="container">
-          <h1 class="title">Отзывы Google</h1>
+        <section id="faqs">
+          <div class="container">
+            <h1 class="title">{{ faq_section.title }}</h1>
 
-          <!-- Slider main container -->
-          <div class="swiper google-slider">
+            <div class="qa-cover">
+              <div class="accordion accordion-flush" id="accordionFlushExample">
+                {% for faq in faq_section.faq_items.all %}
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button
+                      class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#flush-collapse{{ forloop.counter }}"
+                      aria-expanded="false"
+                      aria-controls="flush-collapse{{ forloop.counter }}"
+                    >
+                      {{ faq.question }}
+                    </button>
+                  </h2>
+                  <div
+                    id="flush-collapse{{ forloop.counter }}"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#accordionFlushExample"
+                  >
+                    <div class="accordion-body">{{ faq.answer }}</div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="banner-section">
+          <div class="banner-bg">
+            <div class="container">
+              <h1 class="banner-title">{{ banner_section.title }}</h1>
+
+              <p>{{ banner_section.description }}</p>
+
+              {% for slide in hero_slides %}
+              <div class="d-flex flex-row justify-content-center cta-buttons">
+                <a href="{{ slide.whatsapp_link }}" class="btn-wa">{{ slide.whatsapp_text }}</a>
+                <a href="tel:{{ slide.call_link }}" class="btn-call">{{ slide.call_text }}</a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+
+<section id="google-reviews">
+    <div class="container">
+        <h1 class="title">{{ google_section.title }}</h1>
+
+        <!-- Slider main container -->
+        <div class="swiper google-slider">
             <!-- Additional required wrapper -->
             <div class="swiper-wrapper">
-              <!-- Slides -->
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
+                <!-- Slides -->
+                {% for review in google_section.google.all %}
+                <div class="swiper-slide">
+                    <div class="review-card">
+                        <div class="d-flex flex-row align-items-center review-header position-relative">
+                            <img src="{% static 'assets/google-logo.png' %}" class="google-logo" alt="" />
+                            <div class="avatar">
+                                {% if review.avatar_url %}
+                                    <img src="{{ review.avatar_url }}" alt="{{ review.reviewer_name }}" />
+                                {% else %}
+                                    <img src="{% static 'assets/google-avatar.png' %}" alt="{{ review.reviewer_name }}" />
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column">
+                                <h5 class="review-name">{{ review.reviewer_name }}</h5>
+                                <div class="d-flex flex-row rating gap-1">
+                                    {% for i in "12345"|slice:":review.rating" %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f0ad4e" class="bi bi-star-fill" viewBox="0 0 16 16">
+                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                    </svg>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-text">
+                            <p>{{ review.text }}</p>
+                        </div>
                     </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
                 </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="review-card">
-                  <div
-                    class="d-flex flex-row align-items-center review-header position-relative"
-                  >
-                    <img
-                      src="{% static 'assets/google-logo.png' %}"
-                      class="google-logo"
-                      alt=""
-                    />
-
-                    <div class="avatar">
-                      <img src="{% static 'assets/google-avatar.png' %}" alt="" />
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h5 class="review-name">google username</h5>
-                      <div class="d-flex flex-row rating gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="#f0ad4e"
-                          class="bi bi-star-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-text">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Temporibus nesciunt, eveniet culpa ut magni, et nostrum
-                      nisi nihil repellat excepturi repellendus laborum cum,
-                      obcaecati fuga perferendis consequuntur laudantium quis
-                      animi!
-                    </p>
-                  </div>
-                </div>
-              </div>
+                {% endfor %}
             </div>
-            <!-- If we need pagination -->
-          </div>
-          <div class="pagination position-relative">
-            <div class="swiper-pagination"></div>
-          </div>
         </div>
-      </section>
+        <div class="pagination position-relative">
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</section>
 
       <section id="happy-customers">
         <div class="container">
-          <h1 class="title">Наши счастливые клиенты</h1>
+          <h1 class="title">{{ happy_customers_section.title }}</h1>
 
           <div class="customers-grid">
+            {% for customer in happy_customers_section.customers.all %}
             <div class="customer">
-              <video src="{% static 'assets/SampleVideo_1280x720_2mb.mp4' %}"></video>
+              {% if customer.video %}
+                <video src="{{ customer.video.url }}" controls></video>
+              {% elif customer.image %}
+                <img src="{{ customer.image.url }}" alt="Customer Image" />
+              {% endif %}
             </div>
-            <div class="customer">
-              <img src="{% static 'assets/mac-repair.webp' %}" alt="" />
-            </div>
-            <div class="customer">
-              <video src="{% static 'assets/SampleVideo_1280x720_2mb.mp4' %}"></video>
-            </div>
-            <div class="customer">
-              <img src="{% static 'assets/mac-repair.webp' %}" alt="" />
-            </div>
-            <div class="customer">
-              <video src="{% static 'assets/SampleVideo_1280x720_2mb.mp4' %}"></video>
-              <!-- <img
-                src="./assets/mac-repair.webp"
-                class="img-fluid rounded-top"
-                alt=""
-              /> -->
-            </div>
-            <div class="customer">
-              <img src="{% static 'assets/consoles.png' %}" alt="" />
-            </div>
+            {% endfor %}
           </div>
         </div>
       </section>
 
-      <section id="blog">
-        <div class="container">
-          <h1 class="title">Важно знать!</h1>
+<section id="blog">
+    <div class="container">
+        <h1 class="title">{{ blog_section.title }}</h1>
 
-          <div class="blog-grid">
+        <div class="blog-grid">
+            {% for post in blog_section.posts.all %}
             <div class="blog">
-              <p>Lorem ipsum dolor sit amet.</p>
-
-              <div class="blog-video__cover">
-                <video src="{% static 'assets/SampleVideo_1280x720_2mb.mp4' %}"></video>
-                <img src="{% static 'assets/play-btn.png' %}" alt="" />
-              </div>
+                <p>{{ post.content }}</p>
+                <div class="blog-video__cover">
+                    <video src="{{ post.video.url }}"></video>
+                    <img src="{% static 'assets/play-btn.png' %}" alt="Play button" class="play-button" />
+                </div>
             </div>
-
-            <div class="blog">
-              <p>Lorem ipsum dolor sit amet.</p>
-
-              <div class="blog-video__cover">
-                <video src="{% static 'assets/SampleVideo_1280x720_2mb.mp4' %}"></video>
-                <img src="{% static 'assets/play-btn.png' %}" alt="" />
-              </div>
-            </div>
-
-            <div class="blog">
-              <p>Lorem ipsum dolor sit amet.</p>
-              <div class="blog-video__cover">
-                <video src="{% static 'assets/SampleVideo_1280x720_2mb.mp4' %}"></video>
-                <img src="{% static 'assets/play-btn.png' %}" alt="" />
-              </div>
-            </div>
-            <div class="blog">
-              <p>Lorem ipsum dolor sit amet.</p>
-
-              <div class="blog-video__cover">
-                <video src="{% static 'assets/SampleVideo_1280x720_2mb.mp4' %}"></video>
-                <img src="{% static 'assets/play-btn.png' %}" alt="" />
-              </div>
-            </div>
-          </div>
+            {% endfor %}
         </div>
-      </section>
+    </div>
+</section>
     </main>
     <footer>
       <div class="container">
         <div class="d-flex flex-column flex-lg-row gap-5">
-          <div
-            class="d-flex flex-column order-1  order-lg-2 contacts"
-          >
-            <h3 class="footer-title">Адрес</h3>
 
-            <!-- <h5>GA REPAIR SERVICE</h5> -->
-
-            <div class="d-flex flex-column adress-info gap-3">
-              <a
-                href="https://maps.app.goo.gl/YK9DC7iwyQVBZmBR7"
-                target="_blank"
-                class="d-flex flex-row align-items-center gap-3"
-              >
-                <img src="{% static 'assets/location.svg' %}" alt="" />
-                <span
-                  >Al Barsha 1 Dusseldorf Business Point Office 805 -
-                  Dubai</span
-                >
-              </a>
-              <a
-                href="tel:+971 58 513 8333"
-                target="_blank"
-                class="d-flex flex-row gap-3"
-              >
-                <img src="{% static 'assets/smartphone.svg' %}" alt="" />
-                <span> +971 58 513 8333</span>
-              </a>
-              <a
-                href="mailto:info@geniusahmed.ae"
-                target="_blank"
-                class="d-flex flex-row gap-3"
-              >
-                <img src="{% static 'assets/email.svg' %}" alt="" />
-                <span>info@geniusahmed.ae</span>
-              </a>
-            </div>
-
-            <div class="map">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14450.494538268718!2d55.2050595!3d25.1145986!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6d8ffe75c899%3A0x4bb0786b5b8f748f!2sGenius%20Ahmed%20IT%20Company!5e0!3m2!1sru!2skg!4v1727329576288!5m2!1sru!2skg"
-                width="100%"
-                height="100%"
-                style="border: 0"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-
-            <div class="d-flex flex-row justify-content-center gap-4 payment">
-              <div>
-                <img src="{% static 'assets/visa.svg' %}" alt="" />
-              </div>
-              <div>
-                <img src="{% static 'assets/master.svg' %}" alt="" />
-              </div>
-              <div>
-                <img src="{% static 'assets/apple-pay.svg' %}" alt="" />
-              </div>
-              <div>
-                <img src="{% static 'assets/g-pay.svg' %}" alt="" />
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="d-flex flex-column order-2  order-lg-3 open-hours"
-          >
-            <h3 class="footer-title">Время работы</h3>
-
-            <div class="d-flex flex-column">
-              <div class="d-flex flex-row">
-                <span>Понедельник</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Вторник</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Среда</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Четверг</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Пятница</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Суббота</span>
-                <span> 9:00 - 19:00</span>
-              </div>
-              <div class="d-flex flex-row">
-                <span>Воскресенье</span>
-                <span>Выходной</span>
-              </div>
-            </div>
-          </div>
-
+          <!-- About Section -->
           <div class="d-flex flex-column order-3 order-lg-1 col-12 col-lg-4 footer-about">
             <div class="d-flex flex-column">
-              <img src="{% static 'assets/GA-Logo.png' %}" alt="" />
-              <p>
-                <strong> GA REPAIR SERVICE </strong>специализируется на широком
-                спектре современных технологических и информационных решений,
-                охватывающих следующие направления деятельности: Программные
-                услуги | Аппаратные услуги | Цифровой маркетинг | ИТ-служба
-                поддержки | Умные дома | Кибербезопасность | Системы
-                видеонаблюдения и безопасности | Системы контроля доступа. В
-                Genius Ahmed мы стремимся к инновационным решениям, которые
-                выводят ваш бизнес и дом на новый уровень современных
-                технологий. Наши услуги ориентированы на клиента и предоставляют
-                высококачественные решения для повышения эффективности и
-                безопасности.
-              </p>
+              <img src="{{ footer.logo.url }}" alt="Company Logo" />
+              <p>{{ footer.about_text }}</p>
               <div class="d-flex flex-row justify-content-center gap-3 smn">
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/instagram.jpeg' %}" alt="" />
+                {% for social in footer.socials.all %}
+                <a href="{{ social.url }}" target="_blank">
+                  <img src="{{ social.icon.url }}" alt="{{ social.name }}" />
                 </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/facebook.svg' %}" alt="" />
-                </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/sl_z_072523_61700_01.jpg' %}" alt="" />
-                </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/tiktok.jpeg' %}" alt="" />
-                </a>
-                <a href="" target="_blank">
-                  <img src="{% static 'assets/youtube.svg' %}" alt="" />
-                </a>
+                {% endfor %}
               </div>
             </div>
           </div>
+
+          <!-- Contact Info -->
+          <div class="d-flex flex-column order-1 order-lg-2 contacts">
+            <h3 class="footer-title">{{ footer.title_address }}</h3>
+            <div class="d-flex flex-column adress-info gap-3">
+              <a href="{{ footer.address.first.link }}" target="_blank" class="d-flex flex-row align-items-center gap-3">
+                <img src="{{ footer.address.first.logo.url }}" alt="" />
+                <span>{{ footer.address.first.address }}</span>
+              </a>
+              <a href="{{ footer.phone.first.link }}" target="_blank" class="d-flex flex-row gap-3">
+                <img src="{{ footer.phone.first.logo.url }}" alt="" />
+                <span>{{ footer.phone.first.phone }}</span>
+              </a>
+              <a href="{{ footer.email.first.link }}" target="_blank" class="d-flex flex-row gap-3">
+                <img src="{{ footer.email.first.logo.url }}" alt="" />
+                <span>{{ footer.email.first.email }}</span>
+              </a>
+            </div>
+            <div class="map">
+                {{ footer.address.first.map_iframe|safe }}
+            </div>
+            <div class="d-flex flex-row justify-content-center gap-4 payment">
+              {% for payment in footer.payment_methods.all %}
+              <div><img src="{{ payment.icon.url }}" alt="Payment Method" /></div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Working Hours -->
+          <div class="d-flex flex-column order-2 order-lg-3 open-hours">
+            <h3 class="footer-title">{{ footer.title_work_time }}</h3>
+            <div class="d-flex flex-column">
+              {% for hour in footer.work_hours.all %}
+              <div class="d-flex flex-row">
+                <span>{{ hour.day }}</span>
+                {% if hour.is_closed %}
+                <span>Выходной</span>
+                {% else %}
+                <span>{{ hour.open_time }} - {{ hour.close_time }}</span>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
         </div>
       </div>
     </footer>
     <div class="widgets">
-      <a href="https://wa.me/+123123123">
+      <a href="{{ footer.phone.first.link }}">
           <img src="{% static 'assets/whatsapp.png' %}" alt="">
       </a>
-      <a href="tel:+123123123">
+      <a href="{{ footer.phone.first.link }}">
           <img src="{% static 'assets/call_img.png' %}" alt="">
       </a>
   </div>
@@ -2450,7 +579,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
       <div class="modal-content">
         <div class="modal-header border-0">
-          <h1 class="modal-title" id="exampleModalLabel">Customer name</h1>
+          <h1 class="modal-title" id="exampleModalLabel"></h1>
           <button
             type="button"
             class="btn-close"

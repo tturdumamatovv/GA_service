@@ -61,66 +61,111 @@ UNFOLD = {
             "950": "112 59 0"
         }
     },
-    # "EXTENSIONS": {
-    #     "modeltranslation": {
-    #         "flags": {
-    #             "en": "🇬🇧",
-    #             "fr": "🇫🇷",
-    #             "nl": "🇧🇪",
-    #         },
-    #     },
-    # },
+    "EXTENSIONS": {
+        "modeltranslation": {
+            "flags": {
+                "ru": "🇷🇺",
+                "en": "🇬🇧",
+            },
+        },
+    },
     "SIDEBAR": {
         "show_search": True,  # Отключить поиск в именах приложений и моделей
         "show_all_applications": True,  # Отключить раскрывающееся меню со всеми приложениями и моделями
         "navigation": [
             {
-                "title": _("Пользователи"),
-                "icon": "person",
+                "title": _("Заполнение Сайта"),
+                "icon": "home",
                 "collapsible": True,
                 "items": [
-                    # {
-                    #     "title": _("Адреса пользователей"),
-                    #     "icon": "home",
-                    #     "link": reverse_lazy("admin:authentication_useraddress_changelist"),
-                    # },
-                    # {
-                    #     "title": _("Черный список"),
-                    #     "icon": "home",
-                    #     "link": reverse_lazy("admin:authentication_blacklistedaddress_changelist"),
-                    # },
-                    # {
-                    #     "title": _("Пользователи"),
-                    #     "icon": "person",
-                    #     "link": reverse_lazy("admin:authentication_user_changelist"),
-                    # },
-                    # {
-                    #     "title": _("Время работы"),
-                    #     "icon": "watch",
-                    #     "link": reverse_lazy("admin:authentication_dailyworksummary_changelist"),
-                    # },
-                    # {
-                    #     "title": _("Чаты"),
-                    #     "icon": "chat",
-                    #     "link": reverse_lazy("admin:chat_chat_changelist"),
-                    # },
-                    # {
-                    #     "title": _("Сообщения"),
-                    #     "icon": "message",
-                    #     "link": reverse_lazy("admin:chat_message_changelist"),
-                    # },
+                    {
+                        "title": _("Контактные информации"),
+                        "icon": "call",
+                        "link": reverse_lazy("admin:service_contactinfo_changelist"),
+                    },
+                    {
+                        "title": _("Навигационные ссылки"),
+                        "icon": "navigation",
+                        "link": reverse_lazy("admin:service_navigationlink_changelist"),
+                    },
+                    {
+                        "title": _("Слайды на главной странице"),
+                        "icon": "list",
+                        "link": reverse_lazy("admin:service_heroslide_changelist"),
+                    },
+                    {
+                        "title": _("Раздел техники"),
+                        "icon": "laptop",
+                        "link": reverse_lazy("admin:service_featuressection_changelist"),
+                    },
+                    {
+                        "title": _("Раздел услуги"),
+                        "icon": "info",
+                        "link": reverse_lazy("admin:service_servicessection_changelist"),
+                    },
+                    {
+                        "title": _("Раздел Баннер"),
+                        "icon": "ad",
+                        "link": reverse_lazy("admin:service_bannersection_changelist"),
+                    },
+                    {
+                        "title": _("Раздел 'Почему стоит выбрать нас?'"),
+                        "icon": "star",
+                        "link": reverse_lazy("admin:service_whychooseussection_changelist"),
+                    },
+                    {
+                        "title": _("Статистика"),
+                        "icon": "equalizer",
+                        "link": reverse_lazy("admin:service_statisticssection_changelist"),
+                    },
+                    {
+                        "title": _("Часто задаваемые вопросы"),
+                        "icon": "quiz",
+                        "link": reverse_lazy("admin:service_faqsection_changelist"),
+                    },
+                    {
+                        "title": _("Раздел 'Наши счастливые клиенты'"),
+                        "icon": "mood",
+                        "link": reverse_lazy("admin:service_happycustomerssection_changelist"),
+                    },
+                    {
+                        "title": _("Раздел 'Блог'"),
+                        "icon": "variables",
+                        "link": reverse_lazy("admin:service_blogsection_changelist"),
+                    },
+                    {
+                        "title": _("Раздел Футеры"),
+                        "icon": "box",
+                        "link": reverse_lazy("admin:service_blogsection_changelist"),
+                    },
+                    {
+                        "title": _("Раздел 'О нас'"),
+                        "icon": "publish",
+                        "link": reverse_lazy("admin:service_aboutsection_changelist"),
+                    },
+                    {
+                        "title": _("Раздел 'Наша Команда'"),
+                        "icon": "group",
+                        "link": reverse_lazy("admin:service_teamsection_changelist"),
+                    },
+                    {
+                        "title": _("Раздел 'Google Отзывы'"),
+                        "icon": "reviews",
+                        "link": reverse_lazy("admin:service_googlesection_changelist"),
+                    },
+
                 ],
             },
             {
-                "title": _("Рестораны"),
-                "icon": "restaurant",
+                "title": _("Мета данные"),
+                "icon": "settings",
                 "collapsible": True,
                 "items": [
-                    # {
-                    #     "title": _("Рестораны"),
-                    #     "icon": "coffee",
-                    #     "link": reverse_lazy("admin:orders_restaurant_changelist"),
-                    # },
+                    {
+                        "title": _("Мета данные"),
+                        "icon": "database",
+                        "link": reverse_lazy("admin:service_sitesettings_changelist"),
+                    },
                     # {
                     #     "title": _("Заказы"),
                     #     "icon": "archive",
