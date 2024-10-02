@@ -323,7 +323,7 @@ celerybeat-schedule.*
 
 req.txt
 # Environments
-
+.env
 env/
 
 env.bak/
