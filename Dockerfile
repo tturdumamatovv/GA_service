@@ -1,23 +1,10 @@
-# Use a lightweight Python base image
-FROM python:3.11-slim
+FROM python:3.10
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV APP_HOME /app
 
-# Set the working directory
-WORKDIR /app
+WORKDIR $APP_HOME
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libpq-dev gcc \
-    --no-install-recommends && rm -rf /var/lib/apt/lists/*
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
 
-# Install Python dependencies
-COPY requirements/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-ENV DJANGO_SETTINGS_MODULE=config.settings
-
-
-# Copy project files
 COPY . .
