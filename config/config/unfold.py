@@ -136,7 +136,7 @@ UNFOLD = {
                     {
                         "title": _("Раздел Футеры"),
                         "icon": "box",
-                        "link": reverse_lazy("admin:service_blogsection_changelist"),
+                        "link": reverse_lazy("admin:service_footersection_changelist"),
                     },
                     {
                         "title": _("Раздел 'О нас'"),
