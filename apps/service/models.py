@@ -478,7 +478,7 @@ class WorkHour(models.Model):
 
     def __str__(self):
         if self.is_closed:
-            return f"{self.day}: {_('Closed')}"
+            return f"{self.day}: {_('Выходной')}"
         return f"{self.day}: {self.open_time} - {self.close_time}"
 
 
