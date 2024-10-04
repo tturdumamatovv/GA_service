@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-04 14:47+0600\n"
+"POT-Creation-Date: 2024-10-04 15:26+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -116,7 +116,7 @@ msgid ""
 msgstr ""
 
 #: apps/service/models.py:112 apps/service/models.py:228
-#: apps/service/models.py:383 apps/service/models.py:512
+#: apps/service/models.py:383 apps/service/models.py:524
 msgid "Изображение"
 msgstr ""
 
@@ -216,8 +216,8 @@ msgstr ""
 #: apps/service/models.py:207 apps/service/models.py:246
 #: apps/service/models.py:322 apps/service/models.py:347
 #: apps/service/models.py:371 apps/service/models.py:395
-#: apps/service/models.py:500 apps/service/models.py:525
-#: apps/service/models.py:550
+#: apps/service/models.py:512 apps/service/models.py:537
+#: apps/service/models.py:562
 msgid "Заголовок секции"
 msgstr ""
 
@@ -237,10 +237,10 @@ msgstr ""
 #: apps/service/models.py:333 apps/service/models.py:358
 #: apps/service/models.py:382 apps/service/models.py:406
 #: apps/service/models.py:435 apps/service/models.py:443
-#: apps/service/models.py:450 apps/service/models.py:457
-#: apps/service/models.py:474 apps/service/models.py:486
-#: apps/service/models.py:511 apps/service/models.py:536
-#: apps/service/models.py:561
+#: apps/service/models.py:450 apps/service/models.py:468
+#: apps/service/models.py:486 apps/service/models.py:498
+#: apps/service/models.py:523 apps/service/models.py:548
+#: apps/service/models.py:573
 msgid "Секция"
 msgstr ""
 
@@ -456,147 +456,175 @@ msgid "Ссылка на Email"
 msgstr ""
 
 #: apps/service/models.py:458
+msgid "Понедельник"
+msgstr "Monday"
+
+#: apps/service/models.py:459
+msgid "Вторник"
+msgstr "Tuesday"
+
+#: apps/service/models.py:460
+msgid "Среда"
+msgstr "Wednesday"
+
+#: apps/service/models.py:461
+msgid "Четверг"
+msgstr "Thursday"
+
+#: apps/service/models.py:462
+msgid "Пятница"
+msgstr "Friday"
+
+#: apps/service/models.py:463
+msgid "Суббота"
+msgstr "Saturday"
+
+#: apps/service/models.py:464
+msgid "Воскресенье"
+msgstr "Sunday"
+
+#: apps/service/models.py:469
 msgid "День"
 msgstr ""
 
-#: apps/service/models.py:459
+#: apps/service/models.py:470
 msgid "Время открытия"
 msgstr ""
 
-#: apps/service/models.py:460
+#: apps/service/models.py:471
 msgid "Время закрытия"
 msgstr ""
 
-#: apps/service/models.py:461 templates/index.html:542
+#: apps/service/models.py:472 templates/index.html:542
 msgid "Выходной"
 msgstr "Closed"
 
-#: apps/service/models.py:464 apps/service/models.py:465
+#: apps/service/models.py:475 apps/service/models.py:476
 msgid "Рабочее время"
 msgstr ""
 
-#: apps/service/models.py:475
+#: apps/service/models.py:487
 msgid "Иконка метода оплаты"
 msgstr ""
 
-#: apps/service/models.py:478
+#: apps/service/models.py:490
 msgid "Метод оплаты"
 msgstr ""
 
-#: apps/service/models.py:479
+#: apps/service/models.py:491
 msgid "Методы оплаты"
 msgstr ""
 
-#: apps/service/models.py:487
+#: apps/service/models.py:499
 msgid "Название соц. сети"
 msgstr ""
 
-#: apps/service/models.py:488
+#: apps/service/models.py:500
 msgid "Ссылка на соц. сеть"
 msgstr ""
 
-#: apps/service/models.py:489
+#: apps/service/models.py:501
 msgid "Иконка соц. сети"
 msgstr ""
 
-#: apps/service/models.py:492
+#: apps/service/models.py:504
 msgid "Социальная сеть"
 msgstr ""
 
-#: apps/service/models.py:493
+#: apps/service/models.py:505
 msgid "Социальные сети"
 msgstr ""
 
-#: apps/service/models.py:503 apps/service/models.py:504
+#: apps/service/models.py:515 apps/service/models.py:516
 #: config/config/unfold.py:142
 msgid "Раздел 'О нас'"
 msgstr ""
 
-#: apps/service/models.py:513
+#: apps/service/models.py:525
 msgid "Описание"
 msgstr ""
 
-#: apps/service/models.py:514
+#: apps/service/models.py:526
 msgid "Отображение текста слева"
 msgstr ""
 
-#: apps/service/models.py:517
+#: apps/service/models.py:529
 msgid "О нас: Блок"
 msgstr ""
 
-#: apps/service/models.py:518
+#: apps/service/models.py:530
 msgid "О нас: Блоки"
 msgstr ""
 
-#: apps/service/models.py:528 apps/service/models.py:529
+#: apps/service/models.py:540 apps/service/models.py:541
 msgid "Раздел 'Наша команда'"
 msgstr ""
 
-#: apps/service/models.py:537
+#: apps/service/models.py:549
 msgid "Имя"
 msgstr ""
 
-#: apps/service/models.py:538
+#: apps/service/models.py:550
 msgid "Должность"
 msgstr ""
 
-#: apps/service/models.py:539
+#: apps/service/models.py:551
 msgid "Фотография"
 msgstr ""
 
-#: apps/service/models.py:542
+#: apps/service/models.py:554
 msgid "Член команды"
 msgstr ""
 
-#: apps/service/models.py:543
+#: apps/service/models.py:555
 msgid "Члены команды"
 msgstr ""
 
-#: apps/service/models.py:553
+#: apps/service/models.py:565
 msgid "Раздел 'Google отзыв'"
 msgstr ""
 
-#: apps/service/models.py:554
+#: apps/service/models.py:566
 msgid "Раздел 'Google отзывы'"
 msgstr ""
 
-#: apps/service/models.py:562
+#: apps/service/models.py:574
 msgid "Имя пользователя"
 msgstr ""
 
-#: apps/service/models.py:563
+#: apps/service/models.py:575
 msgid "Рейтинг"
 msgstr ""
 
-#: apps/service/models.py:564
+#: apps/service/models.py:576
 msgid "Текст отзыва"
 msgstr ""
 
-#: apps/service/models.py:565
+#: apps/service/models.py:577
 msgid "URL аватара"
 msgstr ""
 
-#: apps/service/models.py:568
+#: apps/service/models.py:580
 msgid "Отзыв Google"
 msgstr ""
 
-#: apps/service/models.py:569
+#: apps/service/models.py:581
 msgid "Отзывы Google"
 msgstr ""
 
-#: apps/service/models.py:576
+#: apps/service/models.py:588
 msgid "Мета заголовок"
 msgstr ""
 
-#: apps/service/models.py:577
+#: apps/service/models.py:589
 msgid "Мета описание"
 msgstr ""
 
-#: apps/service/models.py:578
+#: apps/service/models.py:590
 msgid "Мета изображение"
 msgstr ""
 
-#: apps/service/models.py:590 apps/service/models.py:591
+#: apps/service/models.py:602 apps/service/models.py:603
 msgid "Настройки сайта"
 msgstr ""
 
