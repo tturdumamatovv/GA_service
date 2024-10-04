@@ -459,31 +459,31 @@ msgstr ""
 
 #: apps/service/models.py:458
 msgid "Понедельник"
-msgstr "Понедельник"
+msgstr "Monday"
 
 #: apps/service/models.py:459
 msgid "Вторник"
-msgstr "Вторник"
+msgstr "Tuesday"
 
 #: apps/service/models.py:460
 msgid "Среда"
-msgstr "Среда"
+msgstr "Wednesday"
 
 #: apps/service/models.py:461
 msgid "Четверг"
-msgstr "Четверг"
+msgstr "Thursday"
 
 #: apps/service/models.py:462
 msgid "Пятница"
-msgstr "Пятница"
+msgstr "Friday"
 
 #: apps/service/models.py:463
 msgid "Суббота"
-msgstr "Суббота"
+msgstr "Saturday"
 
 #: apps/service/models.py:464
 msgid "Воскресенье"
-msgstr "Воскресенье"
+msgstr "Sunday"
 
 #: apps/service/models.py:469
 msgid "День"
