@@ -42,7 +42,7 @@ def index(request):
             When(work_hours__day="Воскресенье", then=Value(7)),
             output_field=IntegerField(),
         )
-    ).order_by('day_order')
+    ).order_by('day_order').first()
     google_section = GoogleSection.objects.first()
     site_meta = SiteSettings.objects.first()
     return render(request, 'index.html', {
