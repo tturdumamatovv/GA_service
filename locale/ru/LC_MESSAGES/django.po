@@ -498,12 +498,12 @@ msgid "Время закрытия"
 msgstr ""
 
 #: apps/service/models.py:472 templates/index.html:542
-msgid "Выходной"
+msgid "Closed"
 msgstr "Выходной"
 
 #: apps/service/models.py:475 apps/service/models.py:476
-msgid "Рабочее время"
-msgstr ""
+msgid "Working time"
+msgstr "Рабочее время"
 
 #: apps/service/models.py:487
 msgid "Иконка метода оплаты"
