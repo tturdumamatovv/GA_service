@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-04 16:14+0600\n"
+"POT-Creation-Date: 2024-10-04 16:31+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -503,8 +503,8 @@ msgid "Время закрытия"
 msgstr ""
 
 #: apps/service/models.py:472
-msgid "Closed"
-msgstr "Выходной"
+msgid "Выходной"
+msgstr ""
 
 #: apps/service/models.py:475 apps/service/models.py:476
 msgid "Рабочее время"
@@ -671,7 +671,9 @@ msgstr ""
 msgid "English"
 msgstr ""
 
-#: templates/index.html:542
+#: templates/about-us.html:378 templates/contacts.html:210
+#: templates/contacts.html:287 templates/index.html:542
+#: templates/services.html:321
 msgid "Closed"
 msgstr "Выходной"
 
