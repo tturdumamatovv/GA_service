@@ -183,22 +183,22 @@
   </div>
 </section>
 
-<section id="out-team">
-  <div class="container">
-    <h1 class="title">{{ team_section.title }}</h1>
-    <div class="team-cover">
-      {% for member in team_section.members.all %}
-      <div class="team-member d-flex flex-column gap-3">
-        <img src="{{ member.image.url }}" alt="{{ member.name }}">
-        <div class="team-member_name">
-          <h5>{{ member.name }}</h5>
-          <p class="p-0 m-0">{{ member.position }}</p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
+<!--<section id="out-team">-->
+<!--  <div class="container">-->
+<!--    <h1 class="title">{{ team_section.title }}</h1>-->
+<!--    <div class="team-cover">-->
+<!--      {% for member in team_section.members.all %}-->
+<!--      <div class="team-member d-flex flex-column gap-3">-->
+<!--        <img src="{{ member.image.url }}" alt="{{ member.name }}">-->
+<!--        <div class="team-member_name">-->
+<!--          <h5>{{ member.name }}</h5>-->
+<!--          <p class="p-0 m-0">{{ member.position }}</p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      {% endfor %}-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
 
       <section id="features">
         <div class="container">
@@ -488,4 +488,19 @@
       main.style.marginTop = header + 1 + 'px'
   
     </script>
+  <script>
+    let lastScrollY = window.scrollY;
+    const headerEl = document.querySelector('header');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > lastScrollY) {
+        // Scrolling down
+        headerEl.style.transform = 'translateY(-100%)';
+      } else {
+        // Scrolling up
+        headerEl.style.transform = 'none';
+      }
+      lastScrollY = window.scrollY;
+    });
+  </script>
 </html>

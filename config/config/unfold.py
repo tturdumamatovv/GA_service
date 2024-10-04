@@ -143,11 +143,11 @@ UNFOLD = {
                         "icon": "publish",
                         "link": reverse_lazy("admin:service_aboutsection_changelist"),
                     },
-                    {
-                        "title": _("Раздел 'Наша Команда'"),
-                        "icon": "group",
-                        "link": reverse_lazy("admin:service_teamsection_changelist"),
-                    },
+                    # {
+                    #     "title": _("Раздел 'Наша Команда'"),
+                    #     "icon": "group",
+                    #     "link": reverse_lazy("admin:service_teamsection_changelist"),
+                    # },
                     {
                         "title": _("Раздел 'Google Отзывы'"),
                         "icon": "reviews",

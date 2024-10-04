@@ -285,21 +285,21 @@ class AboutSectionAdmin(ModelAdmin, TabbedTranslationAdmin):
     inlines = [AboutBlockInline]
 
 
-class TeamMemberInline(TabularInline, TranslationTabularInline):
-    model = TeamMember
-    extra = 0
-
-
-@admin.register(TeamSection)
-class TeamSectionAdmin(ModelAdmin, TabbedTranslationAdmin):
-    list_display = ('title',)
-
-    def has_add_permission(self, request):
-        if TeamSection.objects.exists():
-            return False
-        return True
-
-    inlines = [TeamMemberInline]
+# class TeamMemberInline(TabularInline, TranslationTabularInline):
+#     model = TeamMember
+#     extra = 0
+#
+#
+# @admin.register(TeamSection)
+# class TeamSectionAdmin(ModelAdmin, TabbedTranslationAdmin):
+#     list_display = ('title',)
+#
+#     def has_add_permission(self, request):
+#         if TeamSection.objects.exists():
+#             return False
+#         return True
+#
+#     inlines = [TeamMemberInline]
 
 
 class GoogleReviewInline(TabularInline):

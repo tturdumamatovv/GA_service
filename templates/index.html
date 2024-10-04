@@ -662,4 +662,19 @@
     main.style.marginTop = header + 1 + 'px'
 
   </script>
+  <script>
+    let lastScrollY = window.scrollY;
+    const headerEl = document.querySelector('header');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > lastScrollY) {
+        // Scrolling down
+        headerEl.style.transform = 'translateY(-100%)';
+      } else {
+        // Scrolling up
+        headerEl.style.transform = 'none';
+      }
+      lastScrollY = window.scrollY;
+    });
+  </script>
 </html>
