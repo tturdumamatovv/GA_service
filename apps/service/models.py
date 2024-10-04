@@ -454,8 +454,19 @@ class EmailInfoFooter(SingletonModel):
 
 
 class WorkHour(models.Model):
-    section = models.ForeignKey(FooterSection, on_delete=models.CASCADE, related_name="work_hours", verbose_name=_("Секция"))
-    day = models.CharField(max_length=20, verbose_name=_("День"), null=True)
+    DAY_CHOICES = [
+        (1, _("Понедельник")),
+        (2, _("Вторник")),
+        (3, _("Среда")),
+        (4, _("Четверг")),
+        (5, _("Пятница")),
+        (6, _("Суббота")),
+        (7, _("Воскресенье")),
+    ]
+
+    section = models.ForeignKey(FooterSection, on_delete=models.CASCADE, related_name="work_hours",
+                                verbose_name=_("Секция"))
+    day = models.IntegerField(choices=DAY_CHOICES, verbose_name=_("День"), null=True)  # Уже заполнено
     open_time = models.CharField(max_length=20, verbose_name=_("Время открытия"))
     close_time = models.CharField(max_length=20, verbose_name=_("Время закрытия"))
     is_closed = models.BooleanField(default=False, verbose_name=_("Выходной"))
@@ -463,7 +474,7 @@ class WorkHour(models.Model):
     class Meta:
         verbose_name = _("Рабочее время")
         verbose_name_plural = _("Рабочее время")
-        ordering = ['id']
+        ordering = ['day']
 
     def __str__(self):
         if self.is_closed:
