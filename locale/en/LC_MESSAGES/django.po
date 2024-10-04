@@ -456,32 +456,32 @@ msgid "Ссылка на Email"
 msgstr ""
 
 #: apps/service/models.py:458
-msgid "Понедельник"
-msgstr "Monday"
+msgid "Monday"
+msgstr "Понедельник"
 
 #: apps/service/models.py:459
-msgid "Вторник"
-msgstr "Tuesday"
+msgid "Tuesday"
+msgstr "Вторник"
 
 #: apps/service/models.py:460
-msgid "Среда"
-msgstr "Wednesday"
+msgid "Wednesday"
+msgstr "Среда"
 
 #: apps/service/models.py:461
-msgid "Четверг"
-msgstr "Thursday"
+msgid "Thursday"
+msgstr "Четверг"
 
 #: apps/service/models.py:462
-msgid "Пятница"
-msgstr "Friday"
+msgid "Friday"
+msgstr "Пятница"
 
 #: apps/service/models.py:463
-msgid "Суббота"
-msgstr "Saturday"
+msgid "Saturday"
+msgstr "Суббота"
 
 #: apps/service/models.py:464
-msgid "Воскресенье"
-msgstr "Sunday"
+msgid "Sunday"
+msgstr "Воскресенье"
 
 #: apps/service/models.py:469
 msgid "День"
