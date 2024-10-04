@@ -537,9 +537,9 @@
               <div class="d-flex flex-column">
                   {% for hour in footer_work_hours %}
                   <div class="d-flex flex-row">
-                      <span>{{ hour.get_day_display }}</span>
+                      <span>{% trans hour.get_day_display %}</span>
                       {% if hour.is_closed %}
-                      <span>{% trans "Выходной" %}</span>
+                      <span>{% trans "Closed" %}</span>
                       {% else %}
                       <span>{{ hour.open_time }} - {{ hour.close_time }}</span>
                       {% endif %}

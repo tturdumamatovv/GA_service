@@ -455,13 +455,13 @@ class EmailInfoFooter(SingletonModel):
 
 class WorkHour(models.Model):
     DAY_CHOICES = [
-        (1, _("Понедельник")),
-        (2, _("Вторник")),
-        (3, _("Среда")),
-        (4, _("Четверг")),
-        (5, _("Пятница")),
-        (6, _("Суббота")),
-        (7, _("Воскресенье")),
+        (1, _("Monday")),
+        (2, _("Tuesday")),
+        (3, _("Wednesday")),
+        (4, _("Thursday")),
+        (5, _("Friday")),
+        (6, _("Saturday")),
+        (7, _("Sunday")),
     ]
 
     section = models.ForeignKey(FooterSection, on_delete=models.CASCADE, related_name="work_hours",
