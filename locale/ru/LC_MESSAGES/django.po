@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-04 15:25+0600\n"
+"POT-Creation-Date: 2024-10-04 16:10+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -458,30 +458,37 @@ msgid "Ссылка на Email"
 msgstr ""
 
 #: apps/service/models.py:458
+#: venv/lib/python3.12/site-packages/django/utils/dates.py:7
 msgid "Monday"
 msgstr "Понедельник"
 
 #: apps/service/models.py:459
+#: venv/lib/python3.12/site-packages/django/utils/dates.py:8
 msgid "Tuesday"
 msgstr "Вторник"
 
 #: apps/service/models.py:460
+#: venv/lib/python3.12/site-packages/django/utils/dates.py:9
 msgid "Wednesday"
 msgstr "Среда"
 
 #: apps/service/models.py:461
+#: venv/lib/python3.12/site-packages/django/utils/dates.py:10
 msgid "Thursday"
 msgstr "Четверг"
 
 #: apps/service/models.py:462
+#: venv/lib/python3.12/site-packages/django/utils/dates.py:11
 msgid "Friday"
 msgstr "Пятница"
 
 #: apps/service/models.py:463
+#: venv/lib/python3.12/site-packages/django/utils/dates.py:12
 msgid "Saturday"
 msgstr "Суббота"
 
 #: apps/service/models.py:464
+#: venv/lib/python3.12/site-packages/django/utils/dates.py:13
 msgid "Sunday"
 msgstr "Воскресенье"
 
@@ -497,13 +504,13 @@ msgstr ""
 msgid "Время закрытия"
 msgstr ""
 
-#: apps/service/models.py:472 templates/index.html:542
-msgid "Closed"
-msgstr "Выходной"
+#: apps/service/models.py:472
+msgid "Выходной"
+msgstr ""
 
 #: apps/service/models.py:475 apps/service/models.py:476
-msgid "Working time"
-msgstr "Рабочее время"
+msgid "Рабочее время"
+msgstr ""
 
 #: apps/service/models.py:487
 msgid "Иконка метода оплаты"
@@ -665,6 +672,10 @@ msgstr ""
 #: config/settings.py:139
 msgid "English"
 msgstr ""
+
+#: templates/index.html:542
+msgid "Closed"
+msgstr "Выходной"
 
 #: venv/lib/python3.12/site-packages/django/contrib/messages/apps.py:16
 msgid "Messages"
@@ -1400,34 +1411,6 @@ msgstr ""
 
 #: venv/lib/python3.12/site-packages/django/utils/dateformat.py:155
 msgid "noon"
-msgstr ""
-
-#: venv/lib/python3.12/site-packages/django/utils/dates.py:7
-msgid "Monday"
-msgstr ""
-
-#: venv/lib/python3.12/site-packages/django/utils/dates.py:8
-msgid "Tuesday"
-msgstr ""
-
-#: venv/lib/python3.12/site-packages/django/utils/dates.py:9
-msgid "Wednesday"
-msgstr ""
-
-#: venv/lib/python3.12/site-packages/django/utils/dates.py:10
-msgid "Thursday"
-msgstr ""
-
-#: venv/lib/python3.12/site-packages/django/utils/dates.py:11
-msgid "Friday"
-msgstr ""
-
-#: venv/lib/python3.12/site-packages/django/utils/dates.py:12
-msgid "Saturday"
-msgstr ""
-
-#: venv/lib/python3.12/site-packages/django/utils/dates.py:13
-msgid "Sunday"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/django/utils/dates.py:16
@@ -2837,3 +2820,6 @@ msgstr ""
 #: venv/lib/python3.12/site-packages/unfold/widgets.py:549
 msgid "Select currency"
 msgstr ""
+
+#~ msgid "Working time"
+#~ msgstr "Рабочее время"
