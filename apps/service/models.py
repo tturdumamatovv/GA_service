@@ -466,6 +466,7 @@ class WorkHour(models.Model):
         (7, _("Воскресенье")),
     ]
 
+
     section = models.ForeignKey(FooterSection, on_delete=models.CASCADE, related_name="work_hours",
                                 verbose_name=_("Секция"))
     day = models.IntegerField(choices=DAY_CHOICES, verbose_name=_("День"), blank=True, null=True)
