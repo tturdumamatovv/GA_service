@@ -1,3 +1,5 @@
+from lib2to3.pgen2.tokenize import blank_re
+
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -466,7 +468,7 @@ class WorkHour(models.Model):
 
     section = models.ForeignKey(FooterSection, on_delete=models.CASCADE, related_name="work_hours",
                                 verbose_name=_("Секция"))
-    day = models.IntegerField(choices=DAY_CHOICES, verbose_name=_("День"))
+    day = models.IntegerField(choices=DAY_CHOICES, verbose_name=_("День"), blank=True, null=True)
     open_time = models.CharField(max_length=20, verbose_name=_("Время открытия"))
     close_time = models.CharField(max_length=20, verbose_name=_("Время закрытия"))
     is_closed = models.BooleanField(default=False, verbose_name=_("Выходной"))
