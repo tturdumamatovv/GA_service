@@ -1,5 +1,3 @@
-from lib2to3.pgen2.tokenize import blank_re
-
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -456,20 +454,8 @@ class EmailInfoFooter(SingletonModel):
 
 
 class WorkHour(models.Model):
-    DAY_CHOICES = [
-        (1, _("Понедельник")),
-        (2, _("Вторник")),
-        (3, _("Среда")),
-        (4, _("Четверг")),
-        (5, _("Пятница")),
-        (6, _("Суббота")),
-        (7, _("Воскресенье")),
-    ]
-
-
-    section = models.ForeignKey(FooterSection, on_delete=models.CASCADE, related_name="work_hours",
-                                verbose_name=_("Секция"))
-    day = models.IntegerField(choices=DAY_CHOICES, verbose_name=_("День"), blank=True, null=True)
+    section = models.ForeignKey(FooterSection, on_delete=models.CASCADE, related_name="work_hours", verbose_name=_("Секция"))
+    day = models.CharField(max_length=20, verbose_name=_("День"), null=True)
     open_time = models.CharField(max_length=20, verbose_name=_("Время открытия"))
     close_time = models.CharField(max_length=20, verbose_name=_("Время закрытия"))
     is_closed = models.BooleanField(default=False, verbose_name=_("Выходной"))
@@ -477,12 +463,12 @@ class WorkHour(models.Model):
     class Meta:
         verbose_name = _("Рабочее время")
         verbose_name_plural = _("Рабочее время")
-        ordering = ['day']  # Сортировка по числовому значению дня
+        ordering = ['id']
 
     def __str__(self):
         if self.is_closed:
-            return f"{self.get_day_display()}: {_('Выходной')}"
-        return f"{self.get_day_display()}: {self.open_time} - {self.close_time}"
+            return f"{self.day}: {_('Выходной')}"
+        return f"{self.day}: {self.open_time} - {self.close_time}"
 
 
 class PaymentMethod(models.Model):
