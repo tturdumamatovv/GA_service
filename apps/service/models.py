@@ -470,6 +470,7 @@ class WorkHour(models.Model):
     open_time = models.CharField(max_length=20, verbose_name=_("Время открытия"))
     close_time = models.CharField(max_length=20, verbose_name=_("Время закрытия"))
     is_closed = models.BooleanField(default=False, verbose_name=_("Выходной"))
+    weekend = models.CharField(max_length=255, verbose_name=_("Выходные, Праздники"), null=True, blank=True)
 
     class Meta:
         verbose_name = _("Рабочее время")
