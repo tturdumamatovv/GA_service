@@ -240,7 +240,7 @@ class EmailInfoFooterInline(TabularInline):
         return True
 
 
-class WorkHourInline(TabularInline, TranslationTabularInline):
+class WorkHourInline(TabularInline):
     model = WorkHour
     extra = 0
 

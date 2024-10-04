@@ -135,9 +135,9 @@ class LocationInfoFooterTranslationOptions(TranslationOptions):
     fields = ('address',)
 
 
-@register(WorkHour)
-class WorkHourTranslationOptions(TranslationOptions):
-    fields = ('day',)
+# @register(WorkHour)
+# class WorkHourTranslationOptions(TranslationOptions):
+#     fields = ('day',)
 
 
 @register(AboutSection)
