@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Case, When, Value, IntegerField
 from .models import (
     ContactInfo,
     NavigationLink,
@@ -30,7 +31,18 @@ def index(request):
     faq_section = FAQSection.objects.first()
     happy_customers_section = HappyCustomersSection.objects.first()
     blog_section = BlogSection.objects.first()
-    footer = FooterSection.objects.first()
+    footer = FooterSection.objects.annotate(
+        day_order=Case(
+            When(work_hours__day="Понедельник", then=Value(1)),
+            When(work_hours__day="Вторник", then=Value(2)),
+            When(work_hours__day="Среда", then=Value(3)),
+            When(work_hours__day="Четверг", then=Value(4)),
+            When(work_hours__day="Пятница", then=Value(5)),
+            When(work_hours__day="Суббота", then=Value(6)),
+            When(work_hours__day="Воскресенье", then=Value(7)),
+            output_field=IntegerField(),
+        )
+    ).order_by('day_order')
     google_section = GoogleSection.objects.first()
     site_meta = SiteSettings.objects.first()
     return render(request, 'index.html', {

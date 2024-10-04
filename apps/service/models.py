@@ -463,10 +463,11 @@ class WorkHour(models.Model):
     class Meta:
         verbose_name = _("Рабочее время")
         verbose_name_plural = _("Рабочее время")
+        ordering = ['id']
 
     def __str__(self):
         if self.is_closed:
-            return f"{self.day}: Выходной"
+            return f"{self.day}: {_('Выходной')}"
         return f"{self.day}: {self.open_time} - {self.close_time}"
 
 

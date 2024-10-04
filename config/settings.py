@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 from decouple import config
 
@@ -138,6 +138,10 @@ LANGUAGES = [
     ('ru', _('Russian')),
     ('en', _('English')),
 ]
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
 

@@ -533,19 +533,19 @@
 
           <!-- Working Hours -->
           <div class="d-flex flex-column order-2 order-lg-3 open-hours">
-            <h3 class="footer-title">{{ footer.title_work_time }}</h3>
-            <div class="d-flex flex-column">
-              {% for hour in footer.work_hours.all %}
-              <div class="d-flex flex-row">
-                <span>{{ hour.day }}</span>
-                {% if hour.is_closed %}
-                <span>Выходной</span>
-                {% else %}
-                <span>{{ hour.open_time }} - {{ hour.close_time }}</span>
-                {% endif %}
-              </div>
+              <h3 class="footer-title">{{ footer.title_work_time }}</h3>
+              <div class="d-flex flex-column">
+               {% for hour in footer.work_hours.all|dictsort:"day" %}
+                  <div class="d-flex flex-row">
+                      <span>{{ hour.day }}</span>
+                      {% if hour.is_closed %}
+                      <span>{% trans "Выходной" %}</span>
+                      {% else %}
+                      <span>{{ hour.open_time }} - {{ hour.close_time }}</span>
+                      {% endif %}
+                  </div>
               {% endfor %}
-            </div>
+              </div>
           </div>
 
         </div>
