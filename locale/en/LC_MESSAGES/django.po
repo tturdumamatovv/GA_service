@@ -496,8 +496,8 @@ msgid "Время закрытия"
 msgstr ""
 
 #: apps/service/models.py:472 templates/index.html:542
-msgid "Выходной"
-msgstr "Closed"
+msgid "Closed"
+msgstr "Выходной"
 
 #: apps/service/models.py:475 apps/service/models.py:476
 msgid "Рабочее время"
