@@ -420,6 +420,8 @@ class FooterSection(SingletonModel):
     title_address = models.CharField(verbose_name=_("Заголовок 'Адрес'"), blank=True, null=True)
     title_work_time = models.CharField(verbose_name=_("Заголовок 'Время работы'"), blank=True, null=True)
     logo = models.FileField(upload_to="footer/", verbose_name=_("Логотип"))
+    whatsapp = models.FileField(upload_to="footer/", verbose_name=_("Логотип для whatsapp"))
+    call = models.FileField(upload_to="footer/", verbose_name=_("Логотип для звонка"))
 
     class Meta:
         verbose_name = _("Раздел Футер")
