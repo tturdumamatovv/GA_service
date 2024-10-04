@@ -18,6 +18,22 @@ from .models import (
     SiteSettings, GoogleSection
 )
 
+DAYS_ORDER = {
+    "Понедельник": 1,
+    "Вторник": 2,
+    "Среда": 3,
+    "Четверг": 4,
+    "Пятница": 5,
+    "Суббота": 6,
+    "Воскресенье": 7,
+    "Monday": 1,
+    "Tuesday": 2,
+    "Wednesday": 3,
+    "Thursday": 4,
+    "Friday": 5,
+    "Saturday": 6,
+    "Sunday": 7,
+}
 
 def index(request):
     contact_info = ContactInfo.objects.all()
@@ -31,20 +47,10 @@ def index(request):
     faq_section = FAQSection.objects.first()
     happy_customers_section = HappyCustomersSection.objects.first()
     blog_section = BlogSection.objects.first()
-    footer = FooterSection.objects.annotate(
-        day_order=Case(
-            When(work_hours__day="Понедельник", then=Value(1)),
-            When(work_hours__day="Вторник", then=Value(2)),
-            When(work_hours__day="Среда", then=Value(3)),
-            When(work_hours__day="Четверг", then=Value(4)),
-            When(work_hours__day="Пятница", then=Value(5)),
-            When(work_hours__day="Суббота", then=Value(6)),
-            When(work_hours__day="Воскресенье", then=Value(7)),
-            output_field=IntegerField(),
-        )
-    ).order_by('day_order').first()
+    footer = FooterSection.objects.prefetch_related('work_hours').first()
     google_section = GoogleSection.objects.first()
     site_meta = SiteSettings.objects.first()
+    footer_work_hours = sorted(footer.work_hours.all(), key=lambda x: DAYS_ORDER.get(x.day, 0))
     return render(request, 'index.html', {
         'contact_info': contact_info,
         'navigation': navigation,
@@ -58,6 +64,7 @@ def index(request):
         'happy_customers_section': happy_customers_section,
         'blog_section': blog_section,
         'footer': footer,
+        'footer_work_hours': footer_work_hours,
         'google_section': google_section,
         'site_meta': site_meta,
     })
