@@ -93,23 +93,23 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', cast=int),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_NAME'),
+#         'USER': config('DB_USER'),
+#         'PASSWORD': config('DB_PASSWORD'),
+#         'HOST': config('DB_HOST'),
+#         'PORT': config('DB_PORT', cast=int),
+#     }
+# }
 
 
 # Password validation
@@ -158,14 +158,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]  # Define your static directory
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_URL = '/static/'
+# STATICFILES_DIRS = [BASE_DIR / "static"]  # Define your static directory
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # settings.py
 
 MEDIA_URL = '/media/'  # URL for serving media files
-MEDIA_ROOT = BASE_DIR / 'media'  # Directory where media files will be stored
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory where media files will be stored
 
 
 # Default primary key field type

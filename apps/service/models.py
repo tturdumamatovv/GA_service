@@ -417,8 +417,8 @@ class BlogPost(models.Model):
 
 class FooterSection(SingletonModel):
     about_text = models.TextField(verbose_name=_("Текст о компании"))
-    title_address = models.CharField(verbose_name=_("Заголовок 'Адрес'"), blank=True, null=True)
-    title_work_time = models.CharField(verbose_name=_("Заголовок 'Время работы'"), blank=True, null=True)
+    title_address = models.CharField(verbose_name=_("Заголовок 'Адрес'"), blank=True, null=True, max_length=255)
+    title_work_time = models.CharField(verbose_name=_("Заголовок 'Время работы'"), blank=True, null=True, max_length=255)
     logo = models.FileField(upload_to="footer/", verbose_name=_("Логотип"))
     whatsapp = models.FileField(upload_to="footer/", verbose_name=_("Логотип для whatsapp"))
     call = models.FileField(upload_to="footer/", verbose_name=_("Логотип для звонка"))
